@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=router-monitor
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+    restart: always
+    ports:
+      - 3307:3306
