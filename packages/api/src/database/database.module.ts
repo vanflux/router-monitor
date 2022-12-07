@@ -15,6 +15,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
         password: configService.get('db.pass', { infer: true }),
         database: 'router-monitor',
         autoLoadModels: true,
+        sync: { alter: true },
         synchronize: true,
       }),
     }),
