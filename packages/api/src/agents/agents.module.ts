@@ -8,5 +8,6 @@ import { AgentsService } from './agents.service';
   imports: [SequelizeModule.forFeature([Agent])],
   controllers: [AgentsController],
   providers: [AgentsService],
+  exports: [AgentsService],
 })
 export class AgentsModule {}

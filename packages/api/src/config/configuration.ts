@@ -6,4 +6,11 @@ export default () => ({
     user: process.env.DB_USER || 'user',
     pass: process.env.DB_PASS || 'pass',
   },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'jwt-secret',
+  },
+  admin: {
+    user: process.env.ADMIN_USER || 'admin',
+    pass: process.env.ADMIN_PASS || 'admin',
+  },
 });

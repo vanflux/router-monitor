@@ -13,18 +13,22 @@ export class AgentsService {
   ) {}
 
   async getAll(): Promise<Agent[]> {
-    return this.agentModel.findAll();
+    return await this.agentModel.findAll();
   }
 
-  async create(createAgentDto: CreateAgentDto): Promise<Agent> {
+  async create(createAgentDto: CreateAgentDto): Promise<string> {
     return (await this.agentModel.create({ ...createAgentDto })).id;
   }
 
-  async genSecret(id: number): Promise<string> {
+  async genSecret(id: string): Promise<string> {
     const agent = await this.agentModel.findByPk(id);
     if (!agent) throw new AgentNotFoundException();
     const secret = generate(50);
     await this.agentModel.update({ secret }, { where: { id } });
     return secret;
+  }
+
+  async getByIdAndSecret(id: string, secret: string): Promise<Agent> {
+    return await this.agentModel.findOne({ where: { id, secret } });
   }
 }

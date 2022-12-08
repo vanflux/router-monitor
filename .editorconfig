@@ -5,7 +5,7 @@ end_of_line = lf
 insert_final_newline = true
 
 [*.{js,ts}]
-max_line_length = 120
+max_line_length = 100
 
 [*.{js,ts,json}]
 charset = utf-8
