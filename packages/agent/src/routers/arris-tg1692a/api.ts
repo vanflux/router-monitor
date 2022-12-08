@@ -7,7 +7,7 @@ export class ArrisTG1692AApi {
   private httpClient: RequestAPI<Request, CoreOptions, RequiredUriUrl>;
   private credential: string | undefined;
 
-  constructor(private url: string) {
+  constructor(url: string) {
     this.httpClient = request.defaults({ baseUrl: url });
   }
 

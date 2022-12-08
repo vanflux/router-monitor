@@ -10,8 +10,11 @@ export class Agent extends Model {
   @Column
   secret: string;
 
+  @Column
+  routerType: string;
+
   @CreatedAt
-  creationAt: Date;
+  createdAt: Date;
 
   @UpdatedAt
   updatedAt: Date;

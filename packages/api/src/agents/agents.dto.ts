@@ -12,6 +12,10 @@ export class AgentDto {
 
   @ApiProperty()
   @Expose()
+  routerType: string;
+
+  @ApiProperty()
+  @Expose()
   @Type(() => Date)
   createdAt: Date;
 
@@ -24,6 +28,7 @@ export class AgentDto {
 export class CreateAgentDto extends OmitType(AgentDto, [
   'id',
   'secret',
+  'routerType',
   'createdAt',
   'updatedAt',
 ]) {}

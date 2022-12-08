@@ -31,4 +31,8 @@ export class AgentsService {
   async getByIdAndSecret(id: string, secret: string): Promise<Agent> {
     return await this.agentModel.findOne({ where: { id, secret } });
   }
+
+  async setRouterType(id: string, routerType: string) {
+    return await this.agentModel.update({ routerType }, { where: { id } });
+  }
 }
