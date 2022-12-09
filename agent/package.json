@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "description": "Agent for router monitor",
   "author": "vanflux <lucasabruzzi@hotmail.com>",
-  "homepage": "",
-  "license": "ISC",
   "scripts": {
     "start": "npx ts-node-dev --respawn src/index.ts",
     "build": "npx tsc"

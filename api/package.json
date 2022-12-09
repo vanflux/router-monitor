@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "description": "Api for router monitor",
   "author": "vanflux <lucasabruzzi@hotmail.com>",
-  "homepage": "",
-  "license": "ISC",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

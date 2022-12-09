@@ -2,6 +2,7 @@
   "name": "router-monitor",
   "version": "1.0.0",
   "description": "Router Monitor",
+  "author": "vanflux <lucasabruzzi@hotmail.com>",
   "scripts": {
     "up:dev": "docker-compose -f docker-compose.dev.yml up -d",
     "up:dev:db": "docker-compose -f docker-compose.dev.yml up -d db mongo-express",
