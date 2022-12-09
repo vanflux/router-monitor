@@ -1,12 +1,8 @@
 {
   "name": "router-monitor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Router Monitor",
   "scripts": {
-    "bootstrap": "npx lerna bootstrap",
-    "start": "npx lerna run start",
-    "start:agent": "npx lerna run start --scope=agent",
-    "start:api": "npx lerna run start --scope=api",
     "up:dev": "docker-compose -f docker-compose.dev.yml up -d",
     "up:dev:db": "docker-compose -f docker-compose.dev.yml up -d db mongo-express",
     "up:dev:agent": "docker-compose -f docker-compose.dev.yml up -d agent",
@@ -15,14 +11,5 @@
     "down:dev:db": "docker-compose -f docker-compose.dev.yml rm -s -v db mongo-express",
     "down:dev:agent": "docker-compose -f docker-compose.dev.yml rm -s -v agent",
     "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -s -v api"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {},
-  "workspaces": [
-    "packages/*"
-  ],
-  "devDependencies": {
-    "lerna": "^6.1.0"
   }
 }
