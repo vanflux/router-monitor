@@ -50,5 +50,11 @@ services:
       COORDINATOR_URL: http://api:3000
       WIFI_CLIENTS_REPORT_INTERVAL: 30
 
+  web:
+    build: ./web
+    restart: always
+    ports:
+      - 80:80
+
 volumes:
   db-data:
