@@ -1,8 +1,8 @@
 import { ArrisTG1692AApi } from "./api";
 import { isValidMac } from "../../utils/mac-validator";
-import { MacCtrlAdapter } from "../mac-ctrl-adapter";
+import { MacCtrl } from "../mac-ctrl";
 
-export class ArrisTG1692AMacCtrlAdapter implements MacCtrlAdapter {
+export class ArrisTG1692AMacCtrlAdapter implements MacCtrl {
   constructor(
     private api: ArrisTG1692AApi,
     private wifiId = 10001,

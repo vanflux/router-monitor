@@ -1,5 +1,5 @@
 import { ArrisTG1692AApi } from "./api";
-import { WifiClientItem, WifiClientsAdapter } from "../wifi-clients-adapter";
+import { WifiClientItem, WifiClients } from "../wifi-clients";
 import { RouterException } from "../../exceptions/router-exception";
 
 const optionIdMapping = {
@@ -16,9 +16,9 @@ const optionIdMapping = {
   '2': ['ipAddrType', Number],
   '20': ['lastRxPktRateKbps', Number],
   '21': ['rateSet', String],
-  '22': ['rSSI', Number],
-  '3': ['ipAddr', String],
-  '4': ['ipAddrTextual', String],
+  '22': ['rssi', Number],
+  '3': ['internalIp', String],
+  '4': ['ipAddress', String],
   '5': ['hostName', String],
   '6': ['internalMac', String],
   '7': ['macMfg', String],
@@ -42,9 +42,7 @@ export interface ArrisTG1692AWifiClientItem extends WifiClientItem {
   ipAddrType: number,
   lastRxPktRateKbps: number,
   rateSet: string,
-  rSSI: number,
-  ipAddr: string,
-  ipAddrTextual: string,
+  internalIp: string,
   hostName: string,
   internalMac: string,
   macMfg: string,
@@ -52,7 +50,7 @@ export interface ArrisTG1692AWifiClientItem extends WifiClientItem {
   firstSeen: number,
 }
 
-export class ArrisTG1692AWifiClientsAdapter implements WifiClientsAdapter {
+export class ArrisTG1692AWifiClientsAdapter implements WifiClients {
   constructor(private api: ArrisTG1692AApi) {}
 
   async list(): Promise<ArrisTG1692AWifiClientItem[]> {

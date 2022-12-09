@@ -2,8 +2,9 @@ import request, { CoreOptions, Request, RequestAPI, RequiredUriUrl } from 'reque
 import { RouterException } from '../../exceptions/router-exception';
 import { RouterLoginException } from '../../exceptions/router-login-exception';
 import { RouterUnauthorizedException } from '../../exceptions/router-unauthorized-exception';
+import { RouterApi } from '../router-api';
 
-export class ArrisTG1692AApi {
+export class ArrisTG1692AApi implements RouterApi {
   private httpClient: RequestAPI<Request, CoreOptions, RequiredUriUrl>;
   private credential: string | undefined;
 
@@ -11,15 +12,15 @@ export class ArrisTG1692AApi {
     this.httpClient = request.defaults({ baseUrl: url });
   }
 
-  async login(username: string, password: string): Promise<string> {
+  async login(username: string, password: string): Promise<void> {
     const arg = Buffer.from(`${username}:${password}`).toString('base64');
     const t = Date.now();
-    return new Promise((resolve, reject) =>
+    return new Promise<void>((resolve, reject) =>
       this.httpClient.get(`/login?arg=${arg}=&_n=0&_=${t}`, (err, res, body) => {
         if (err) return reject(err);
         if (res.statusCode !== 200) return reject(new RouterLoginException('Failed to login'));
         this.credential = body;
-        resolve(body);
+        resolve();
       })
     );
   }
