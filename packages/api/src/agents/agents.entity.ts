@@ -1,21 +1,18 @@
-import { UUID, UUIDV4 } from 'sequelize';
-import { Table, Model, CreatedAt, UpdatedAt, Column, PrimaryKey } from 'sequelize-typescript';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, HydratedDocument, now, Types } from 'mongoose';
 
-@Table({ tableName: 'agents' })
-export class Agent extends Model {
-  @PrimaryKey
-  @Column({ type: UUID, defaultValue: UUIDV4 })
-  id: string;
+export type AgentDocument = HydratedDocument<Agent>;
 
-  @Column
+@Schema({ id: true, timestamps: true })
+export class Agent extends Document {
+  @Prop()
   secret: string;
 
-  @Column
-  routerType: string;
-
-  @CreatedAt
+  @Prop({ default: now() })
   createdAt: Date;
 
-  @UpdatedAt
+  @Prop({ default: now() })
   updatedAt: Date;
 }
+
+export const AgentSchema = SchemaFactory.createForClass(Agent);

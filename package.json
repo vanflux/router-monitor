@@ -1,12 +1,20 @@
 {
-  "name": "mac-block-app",
+  "name": "router-monitor",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
     "start": "npx lerna run start",
     "start:agent": "npx lerna run start --scope=agent",
-    "start:api": "npx lerna run start --scope=api"
+    "start:api": "npx lerna run start --scope=api",
+    "up:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "up:dev:db": "docker-compose -f docker-compose.dev.yml up -d db mongo-express",
+    "up:dev:agent": "docker-compose -f docker-compose.dev.yml up -d agent",
+    "up:dev:api": "docker-compose -f docker-compose.dev.yml up -d api",
+    "down:dev": "docker-compose -f docker-compose.dev.yml down",
+    "down:dev:db": "docker-compose -f docker-compose.dev.yml rm -s -v db mongo-express",
+    "down:dev:agent": "docker-compose -f docker-compose.dev.yml rm -s -v agent",
+    "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -s -v api"
   },
   "author": "",
   "license": "ISC",

@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import { CoordinatorApi } from './coordinator/api';
-import { WifiClientsReport } from './coordinator/wifi-client-report';
+import { WifiClientsReportDto } from './coordinator/wifi-client-report';
+import { RouterException } from './exceptions/router-exception';
 import { ArrisTG1692AApi } from "./routers/arris-tg1692a/api";
 import { ArrisTG1692AWifiClientsAdapter } from "./routers/arris-tg1692a/wifi-clients-adapter";
+import { sleep } from './utils/sleep';
 
 async function main() {
   const routerType = process.env.ROUTER_TYPE;
@@ -12,6 +14,7 @@ async function main() {
   const agentId = process.env.AGENT_ID;
   const agentSecret = process.env.AGENT_SECRET;
   const coordinatorUrl = process.env.COORDINATOR_URL;
+  const wifiClientsReportInterval = parseInt(process.env.WIFI_CLIENTS_REPORT_INTERVAL || '30');
   
   if (routerType !== 'arris-tg1692a') throw new Error('Router not supported!');
   if (!routerUrl) throw new Error('ROUTER_URL is missing');
@@ -20,6 +23,7 @@ async function main() {
   if (!agentId) throw new Error('AGENT_ID is missing');
   if (!agentSecret) throw new Error('AGENT_SECRET is missing');
   if (!coordinatorUrl) throw new Error('COORDINATOR_URL is missing');
+  if (!wifiClientsReportInterval || isNaN(wifiClientsReportInterval)) throw new Error('WIFI_CLIENTS_REPORT_INTERVAL is missing');
 
   const coordinatorApi = new CoordinatorApi(coordinatorUrl);
   console.log('Logging on coordinator...');
@@ -29,41 +33,33 @@ async function main() {
   console.log('Logging on router...');
   await routerApi.login(routerAdminUser, routerAdminPass);
 
-  await coordinatorApi.sendRouterType(routerType);
+  await sleep(2000);
+  console.log('Starting wifi client report loop...');
 
   const wifiClients = new ArrisTG1692AWifiClientsAdapter(routerApi);
   while (true) {
-    console.log('Requesting wifi client list...');
-    const wifiClientList = await wifiClients.list();
-    const wifiClientsReport: WifiClientsReport = {
-      clients: wifiClientList.map(client => ({
-        name: client.hostName,
-        mac: client.mac,
-        wifiClientsReportClient: {
+    try {
+      console.log('Requesting wifi client list...');
+      const wifiClientList = await wifiClients.list();
+      const wifiClientsReportDto: WifiClientsReportDto = {
+        routerType,
+        clients: wifiClientList.map(client => ({
+          mac: client.mac,
           hostname: client.hostName,
           ip: client.ipAddrTextual,
           rssi: Number(client.rSSI),
-        },
-      })),
-    };
-    console.log('Sending wifi clients report to coordinator...');
-    await coordinatorApi.sendWifiClientsReport(wifiClientsReport);
-
-    /*console.log(
-      wifiClientList
-      .map(client => ({
-        mac: client.mac,
-        rSSI: client.rSSI,
-        txPackets: client.txPackets,
-        txFailuresPackets: client.txFailuresPackets,
-        rxUnicastPackets: client.rxUnicastPackets,
-        rxMulticastPackets: client.rxMulticastPackets,
-        lastTxPktRateKbps: client.lastTxPktRateKbps,
-        lastRxPktRateKbps: client.lastRxPktRateKbps,
-        hostName: client.hostName,
-      }))
-      .reduce<{[mac: string]: Partial<ArrisTG1692AWifiClientItem>}>((obj, client) => (obj[client.mac] = client, obj), {})
-    );*/
+        })),
+      };
+      console.log('Sending wifi clients report to coordinator... Clients:', wifiClientList.length);
+      await coordinatorApi.sendWifiClientsReport(wifiClientsReportDto);
+    } catch (exc) {
+      console.error('Exception:', exc);
+      if (exc instanceof RouterException) {
+        console.log('Re-logging on router...');
+        await routerApi.login(routerAdminUser, routerAdminPass);
+      }
+    }
+    await sleep(wifiClientsReportInterval * 1000);
   }
 
   /*const macCtrl = new ArrisTG1692AMacCtrlAdapter(routerApi);

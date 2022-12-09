@@ -1,15 +1,11 @@
 
-export interface WifiClientsReport {
-  clients: WifiClient[];
+export interface WifiClientsReportDto {
+  routerType: string;
+  clients: WifiClientsReportClientDto[];
 }
 
-export interface WifiClient {
-  name: string;
+export interface WifiClientsReportClientDto {
   mac: string;
-  wifiClientsReportClient: WifiClientsReportClient;
-}
-
-export interface WifiClientsReportClient {
   rssi: number;
   hostname: string;
   ip: string;

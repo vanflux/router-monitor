@@ -6,7 +6,8 @@
   "homepage": "",
   "license": "ISC",
   "scripts": {
-    "start": "npx ts-node-dev --respawn src/index.ts"
+    "start": "npx ts-node-dev --respawn src/index.ts",
+    "build": "npx tsc"
   },
   "dependencies": {
     "@types/request": "^2.48.8",

@@ -3,7 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
 import { AuthToken } from 'src/auth/auth.interface';
-import { CreateWifiClientsReportDto, WifiClientsReportDto } from './wifi-clients.dto';
+import { CreateWifiClientsReportDto, WifiClientDto, WifiClientsReportDto } from './wifi-clients.dto';
 import { WifiClientsService } from './wifi-clients.service';
 
 @Controller('wificlients')
@@ -13,16 +13,24 @@ export class WifiClientsController {
 
   @Get()
   @Authorized('admin')
+  @ApiResponse({ type: WifiClientDto })
+  async getAllClients() {
+    const wifiClients = await this.wifiClientsService.getAllClients();
+    return plainToInstance(WifiClientDto, wifiClients.map(item => item.toJSON()));
+  }
+
+  @Get('reports')
+  @Authorized('admin')
   @ApiResponse({ type: WifiClientsReportDto })
-  async getAll() {
-    const wifiClientsReports = await this.wifiClientsService.getAll();
+  async getAllReports() {
+    const wifiClientsReports = await this.wifiClientsService.getAllReports();
     return plainToInstance(WifiClientsReportDto, wifiClientsReports.map(item => item.toJSON()));
   }
 
-  @Post()
+  @Post('reports')
   @Authorized('agent')
   @ApiResponse({ type: String })
-  async create(@Auth() authToken: AuthToken, @Body() createWifiClientsReportDto: CreateWifiClientsReportDto) {
-    return await this.wifiClientsService.create(authToken.agent.id, createWifiClientsReportDto);
+  async createReport(@Auth() authToken: AuthToken, @Body() createWifiClientsReportDto: CreateWifiClientsReportDto) {
+    return await this.wifiClientsService.createReport(authToken.agent.id, createWifiClientsReportDto);
   }
 }

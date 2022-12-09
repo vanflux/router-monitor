@@ -1,34 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateWifiClientsReportDto } from './wifi-clients.dto';
-import { WifiClient, WifiClientsReport } from './wifi-clients.entity';
+import { WifiClient, WifiClientDocument, WifiClientsReport, WifiClientsReportDocument } from './wifi-clients.entity';
 
 @Injectable()
 export class WifiClientsService {
   constructor(
-    @InjectModel(WifiClientsReport)
-    private readonly wifiClientsReportModel: typeof WifiClientsReport,
-    @InjectModel(WifiClient)
-    private readonly wifiClientModel: typeof WifiClient,
+    @InjectModel(WifiClientsReport.name)
+    private readonly wifiClientsReportModel: Model<WifiClientsReportDocument>,
+    @InjectModel(WifiClient.name)
+    private readonly wifiClientModel: Model<WifiClientDocument>,
   ) {}
-
-  async getAll() {
-    return await this.wifiClientsReportModel.findAll({
-      include: [{
-        model: WifiClient,
-      }],
-    });
+  
+  async getAllClients() {
+    return await this.wifiClientModel.find();
   }
 
-  async create(agentId: string, wifiClientsReport: CreateWifiClientsReportDto) {
-    const clients = await Promise.all(wifiClientsReport.clients.map(async client => {
-      const [{mac}] = await this.wifiClientModel.upsert({ ...client }, { conflictFields: ['mac'] });
-      const clientModel = new WifiClient({ mac });
-      clientModel.wifiClientsReportClient = client.wifiClientsReportClient;
-      return clientModel;
+  async getAllReports() {
+    return await this.wifiClientsReportModel.find();
+  }
+
+  async createReport(agentId: string, wifiClientsReport: CreateWifiClientsReportDto) {
+    await Promise.all(wifiClientsReport.clients.map(async ({ mac, hostname }) => {
+      await this.wifiClientModel.findOneAndUpdate({ mac }, { mac, name: hostname }, { upsert: true, new: true, setDefaultsOnInsert: true });
     }));
-    const report = await this.wifiClientsReportModel.create({ ...wifiClientsReport, agentId });
-    await report.setClients(clients);
+    const report = await this.wifiClientsReportModel.create({
+      ...wifiClientsReport,
+      agentId,
+    });
     return report.id;
   }
 }

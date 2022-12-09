@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { Agent } from 'src/agents/agents.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Agent, AgentSchema } from 'src/agents/agents.entity';
 import { AgentsController } from './agents.controller';
 import { AgentsService } from './agents.service';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Agent])],
+  imports: [MongooseModule.forFeature([{ name: Agent.name, schema: AgentSchema }])],
   controllers: [AgentsController],
   providers: [AgentsService],
   exports: [AgentsService],

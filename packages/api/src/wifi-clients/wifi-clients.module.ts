@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { MongooseModule } from '@nestjs/mongoose';
 import { WifiClientsController } from './wifi-clients.controller';
-import { WifiClient, WifiClientsReport, WifiClientsReportClient } from './wifi-clients.entity';
+import { WifiClient, WifiClientSchema, WifiClientsReport, WifiClientsReportSchema } from './wifi-clients.entity';
 import { WifiClientsService } from './wifi-clients.service';
 
 @Module({
-  imports: [SequelizeModule.forFeature([WifiClient, WifiClientsReport, WifiClientsReportClient])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: WifiClient.name, schema: WifiClientSchema },
+      { name: WifiClientsReport.name, schema: WifiClientsReportSchema},
+    ])
+  ],
   controllers: [WifiClientsController],
   providers: [WifiClientsService],
   exports: [WifiClientsService],

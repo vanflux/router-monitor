@@ -1,65 +1,50 @@
-import { FLOAT } from 'sequelize';
-import { BelongsToManySetAssociationsMixin, UUID, UUIDV4 } from 'sequelize';
-import { Table, Model, CreatedAt, Column, PrimaryKey, BelongsTo, ForeignKey, BelongsToMany } from 'sequelize-typescript';
-import { Agent } from 'src/agents/agents.entity';
-import { PartialDeep } from 'type-fest';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
-@Table({ tableName: 'wifi_clients_report' })
-export class WifiClientsReport extends Model {
-  @PrimaryKey
-  @Column({ type: UUID, defaultValue: UUIDV4 })
-  id: string;
+export type WifiClientsReportDocument = HydratedDocument<WifiClientsReport>;
 
-  @ForeignKey(() => Agent)
-  @Column({ type: UUID })
-  agentId: string;
+export type WifiClientDocument = HydratedDocument<WifiClient>;
 
-  @BelongsTo(() => Agent)
-  agent: Agent;
-  
-  @BelongsToMany(() => WifiClient, () => WifiClientsReportClient)
-  clients: WifiClient[];
+@Schema({ _id: false })
+export class WifiClientsReportClient {
+  @Prop()
+  mac?: string;
 
-  @CreatedAt
-  createdAt: Date;
-
-  setClients!: BelongsToManySetAssociationsMixin<WifiClient, number>;
-}
-
-@Table({ tableName: 'wifi_client' })
-export class WifiClient extends Model {
-  @PrimaryKey
-  @Column
-  mac: string;
-
-  @Column({ allowNull: true })
-  name: string;
-
-  @BelongsToMany(() => WifiClientsReport, () => WifiClientsReportClient)
-  reports: WifiClientsReport[];
-
-  @CreatedAt
-  createdAt: Date;
-
-  wifiClientsReportClient!: PartialDeep<WifiClientsReportClient>;
-}
-
-@Table({ tableName: 'wifi_clients_report_client', modelName: 'wifiClientsReportClient' })
-export class WifiClientsReportClient extends Model {
-  @ForeignKey(() => WifiClientsReport)
-  @Column({ type: UUID })
-  reportId: string;
-
-  @ForeignKey(() => WifiClient)
-  @Column
-  clientMac: string;
-
-  @Column({ type: FLOAT, allowNull: true })
+  @Prop()
   rssi?: number;
 
-  @Column({ allowNull: true })
-  hostname?: string;
-
-  @Column({ allowNull: true })
+  @Prop()
   ip?: string;
 }
+
+export const WifiClientsReportClientSchema = SchemaFactory.createForClass(WifiClientsReportClient);
+
+@Schema({ id: true, timestamps: { createdAt: true, updatedAt: false } })
+export class WifiClientsReport extends Document {
+  @Prop()
+  agentId: string;
+
+  @Prop()
+  routerType: string;
+  
+  @Prop({ type: [WifiClientsReportClientSchema] })
+  clients: WifiClientsReportClient[];
+
+  @Prop()
+  createdAt: Date;
+}
+
+@Schema({ id: true, timestamps: { createdAt: true, updatedAt: false } })
+export class WifiClient extends Document {
+  @Prop({ unique: true })
+  mac: string;
+
+  @Prop()
+  name: string;
+
+  @Prop()
+  createdAt: Date;
+}
+
+export const WifiClientsReportSchema = SchemaFactory.createForClass(WifiClientsReport);
+export const WifiClientSchema = SchemaFactory.createForClass(WifiClient);

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
@@ -16,7 +16,7 @@ export class AgentsController {
   @ApiResponse({ type: AgentListItemDto })
   async getAll() {
     const agents = await this.agentsService.getAll();
-    return plainToInstance(AgentListItemDto, agents.map(item => item.toJSON()));
+    return plainToInstance(AgentListItemDto, agents.map(agent => agent.toJSON()));
   }
 
   @Post()
@@ -26,19 +26,18 @@ export class AgentsController {
     return await this.agentsService.create(createAgentDto);
   }
 
+  @Delete('/:id')
+  @Authorized('admin')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteById(@Param('id') id: string) {
+    return await this.agentsService.deleteById(id);
+  }
+
   @Post('/:id/secret')
   @Authorized('admin')
   @ApiResponse({ type: String })
   @HttpCode(HttpStatus.OK)
   async genSecret(@Param('id') id: string) {
     return await this.agentsService.genSecret(id);
-  }
-
-  @Post('/router/type/:type')
-  @Authorized('agent')
-  @ApiResponse({ type: String })
-  @HttpCode(HttpStatus.OK)
-  async setRouterType(@Auth() authToken: AuthToken, @Param('type') type: string) {
-    return await this.agentsService.setRouterType(authToken.agent.id, type);
   }
 }

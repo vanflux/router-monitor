@@ -1,5 +1,6 @@
 import { ArrisTG1692AApi } from "./api";
 import { WifiClientItem, WifiClientsAdapter } from "../wifi-clients-adapter";
+import { RouterException } from "../../exceptions/router-exception";
 
 const optionIdMapping = {
   '10': ['lastSeen', Number],
@@ -56,6 +57,7 @@ export class ArrisTG1692AWifiClientsAdapter implements WifiClientsAdapter {
 
   async list(): Promise<ArrisTG1692AWifiClientItem[]> {
     const values = await this.api.getMultiValueOptions(['1.3.6.1.4.1.4115.1.20.1.1.3.42']);
+    if (!values) throw new RouterException('Failed to get wifi clients, values is undefined');
     const wifiClients: {[clientId: string]: ArrisTG1692AWifiClientItem} = {};
     for (const key in values) {
       const [rest, optionId, wifiId, _, clientId] = key.match(/1\.3\.6\.1\.4\.1\.4115\.1\.20\.1\.1\.3\.42\.1\.(\w+)\.(\w+)\.(\w+\.\w+)\.(.+)/) || [];
@@ -69,6 +71,6 @@ export class ArrisTG1692AWifiClientsAdapter implements WifiClientsAdapter {
       }
       (wifiClients[clientId] as any)[optionName] = optionType(value);
     }
-    return Object.values(wifiClients);
+    return Object.values(wifiClients).filter(client => client.mac);
   }
 }

@@ -1,32 +1,11 @@
 import { ApiProperty, OmitType } from "@nestjs/swagger";
-import { Expose, Transform, Type } from "class-transformer";
-
-export class WifiClientReportClientDto {
-  @ApiProperty()
-  @Expose()
-  reportId: string;
-  
-  @ApiProperty()
-  @Expose()
-  clientMac: string;
-  
-  @ApiProperty()
-  @Expose()
-  rssi?: number;
-
-  @ApiProperty()
-  @Expose()
-  hostname?: string;
-
-  @ApiProperty()
-  @Expose()
-  ip?: string;
-}
+import { Expose, Type } from "class-transformer";
 
 export class WifiClientDto {
   @ApiProperty()
   @Expose()
-  id: string;
+  @Type(() => String)
+  _id: string;
   
   @ApiProperty()
   @Expose()
@@ -40,17 +19,35 @@ export class WifiClientDto {
   @Expose()
   @Type(() => Date)
   createdAt: Date;
+}
+
+export class WifiClientReportClientDto {
+  @ApiProperty()
+  @Expose()
+  mac: string;
 
   @ApiProperty()
   @Expose()
-  @Type(() => WifiClientReportClientDto)
-  wifiClientsReportClient: WifiClientReportClientDto;
+  rssi?: number;
+
+  @ApiProperty()
+  @Expose()
+  hostname?: string;
+
+  @ApiProperty()
+  @Expose()
+  ip?: string;
 }
 
 export class WifiClientsReportDto {
   @ApiProperty()
   @Expose()
-  id: string;
+  @Type(() => String)
+  _id: string;
+
+  @ApiProperty()
+  @Expose()
+  routerType: string;
   
   @ApiProperty()
   @Expose()
@@ -58,8 +55,8 @@ export class WifiClientsReportDto {
 
   @ApiProperty({ type: WifiClientReportClientDto, isArray: true })
   @Expose()
-  @Type(() => WifiClientDto)
-  clients: WifiClientDto[];
+  @Type(() => WifiClientReportClientDto)
+  clients: WifiClientReportClientDto[];
 
   @ApiProperty()
   @Expose()
@@ -67,18 +64,13 @@ export class WifiClientsReportDto {
   createdAt: Date;
 }
 
-export class CreateWifiClientReportClientDto extends OmitType(WifiClientReportClientDto, ['clientMac', 'reportId']) {}
+export class CreateWifiClientDto extends OmitType(WifiClientDto, ['_id', 'createdAt']) {}
 
-export class CreateWifiClientDto extends OmitType(WifiClientDto, ['id', 'createdAt', 'wifiClientsReportClient']) {
-  @ApiProperty()
+export class CreateWifiClientReportClientDto extends WifiClientReportClientDto {}
+
+export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, ['_id', 'agentId', 'createdAt', 'clients']) {
+  @ApiProperty({ type: CreateWifiClientReportClientDto, isArray: true })
   @Expose()
   @Type(() => CreateWifiClientReportClientDto)
-  wifiClientsReportClient: CreateWifiClientReportClientDto;
-}
-
-export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, ['id', 'agentId', 'createdAt', 'clients']) {
-  @ApiProperty({ type: CreateWifiClientDto, isArray: true })
-  @Expose()
-  @Type(() => CreateWifiClientDto)
-  clients: CreateWifiClientDto[];
+  clients: CreateWifiClientReportClientDto[];
 }

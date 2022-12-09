@@ -4,15 +4,12 @@ import { Expose, Type } from 'class-transformer';
 export class AgentDto {
   @ApiProperty()
   @Expose()
-  id: string;
+  @Type(() => String)
+  _id: string;
 
   @ApiProperty()
   @Expose()
   secret: string;
-
-  @ApiProperty()
-  @Expose()
-  routerType: string;
 
   @ApiProperty()
   @Expose()
@@ -26,9 +23,8 @@ export class AgentDto {
 }
 
 export class CreateAgentDto extends OmitType(AgentDto, [
-  'id',
+  '_id',
   'secret',
-  'routerType',
   'createdAt',
   'updatedAt',
 ]) {}

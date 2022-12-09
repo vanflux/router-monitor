@@ -1,8 +1,7 @@
 import request, { CoreOptions, Request, RequestAPI, RequiredUriUrl } from "request";
 import { CoordinatorLoginException } from "../exceptions/coordinator-login-exception";
-import { CoordinatorSendRouterTypeException } from "../exceptions/coordinator-send-router-type-exception";
 import { CoordinatorSendWifiClientsReportException } from "../exceptions/coordinator-send-wifi-clients-report-exception";
-import { WifiClientsReport } from "./wifi-client-report";
+import { WifiClientsReportDto } from "./wifi-client-report";
 
 export class CoordinatorApi {
   private httpClient: RequestAPI<Request, CoreOptions, RequiredUriUrl>;
@@ -23,29 +22,13 @@ export class CoordinatorApi {
     );
   }
 
-  async sendRouterType(type: string) {
+  async sendWifiClientsReport(wifiClientsReportDto: WifiClientsReportDto) {
     return new Promise<void>((resolve, reject) =>
       this.httpClient.post(
-        `/agents/router/type/${type}`,
+        `/wificlients/reports`,
         {
           headers: { authorization: `Bearer ${this.token}` },
-        },
-        (err, res, body) => {
-          if (err) return reject(err);
-          if (res.statusCode !== 200) return reject(new CoordinatorSendRouterTypeException('Failed to send router type'));
-          resolve();
-        },
-      )
-    );
-  }
-
-  async sendWifiClientsReport(wifiClientsReport: WifiClientsReport) {
-    return new Promise<void>((resolve, reject) =>
-      this.httpClient.post(
-        `/wificlients`,
-        {
-          headers: { authorization: `Bearer ${this.token}` },
-          body: wifiClientsReport,
+          body: wifiClientsReportDto,
         },
         (err, res, body) => {
           if (err) return reject(err);

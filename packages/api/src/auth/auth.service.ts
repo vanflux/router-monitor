@@ -19,7 +19,7 @@ export class AuthService {
 
   async loginAgent(id: string, secret: string): Promise<AuthResponseDto> {
     const agent = await this.agentsService.getByIdAndSecret(id, secret);
-    const token = this.genJwtToken({ agent: { id: agent.id } });
+    const token = this.genJwtToken({ agent: { id: agent._id } });
     return { token };
   }
 
