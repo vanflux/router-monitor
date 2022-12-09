@@ -8,10 +8,12 @@
     "up:dev:db": "docker-compose -f docker-compose.dev.yml up -d db mongo-express",
     "up:dev:agent": "docker-compose -f docker-compose.dev.yml up -d agent --build",
     "up:dev:api": "docker-compose -f docker-compose.dev.yml up -d api --build",
+    "up:dev:web": "docker-compose -f docker-compose.dev.yml up -d web --build",
     "down:dev": "docker-compose -f docker-compose.dev.yml down",
     "down:dev:db": "docker-compose -f docker-compose.dev.yml rm -s -v db mongo-express",
     "down:dev:agent": "docker-compose -f docker-compose.dev.yml rm -s -v agent",
-    "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -s -v api"
+    "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -s -v api",
+    "down:dev:web": "docker-compose -f docker-compose.dev.yml rm -s -v web"
   },
   "engines": {
     "node": ">= 16",
