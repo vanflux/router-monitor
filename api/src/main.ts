@@ -15,6 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transformOptions }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector, transformOptions));
   app.useGlobalGuards(new AuthGuards(reflector, authService));
+  app.enableCors();
   
   // Setup swagger
   const config = new DocumentBuilder()
