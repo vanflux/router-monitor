@@ -64,6 +64,28 @@ export class WifiClientsReportDto {
   createdAt: Date;
 }
 
+export class WifiClientsRssiReportClientDto {
+  @ApiProperty()
+  @Expose()
+  mac: string;
+
+  @ApiProperty()
+  @Expose()
+  rssi?: number;
+}
+
+export class WifiClientsRssiReportDto {
+  @ApiProperty({ type: WifiClientsRssiReportClientDto, isArray: true })
+  @Expose()
+  @Type(() => WifiClientsRssiReportClientDto)
+  clients: WifiClientsRssiReportClientDto[];
+
+  @ApiProperty()
+  @Expose()
+  @Type(() => Date)
+  date: Date;
+}
+
 export class CreateWifiClientDto extends OmitType(WifiClientDto, ['_id', 'createdAt']) {}
 
 export class CreateWifiClientReportClientDto extends WifiClientReportClientDto {}

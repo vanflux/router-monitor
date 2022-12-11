@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
 import { AuthToken } from 'src/auth/auth.interface';
-import { CreateWifiClientsReportDto, WifiClientDto, WifiClientsReportDto } from './wifi-clients.dto';
+import { CreateWifiClientsReportDto, WifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
 import { WifiClientsService } from './wifi-clients.service';
 
 @Controller('wificlients')
@@ -19,12 +19,12 @@ export class WifiClientsController {
     return plainToInstance(WifiClientDto, wifiClients.map(item => item.toJSON()));
   }
 
-  @Get('reports')
+  @Get('reports/rssi/agent/:agentId')
   @Authorized('admin')
-  @ApiResponse({ type: WifiClientsReportDto })
-  async getAllReports() {
-    const wifiClientsReports = await this.wifiClientsService.getAllReports();
-    return plainToInstance(WifiClientsReportDto, wifiClientsReports.map(item => item.toJSON()));
+  @ApiResponse({ type: WifiClientsRssiReportDto })
+  async getAllRssiReports(@Param('agentId') agentId: string, @Query('granularity', ParseIntPipe) granularity: number) {
+    const wifiClientsReports = await this.wifiClientsService.getAllRssiReports(agentId, granularity);
+    return plainToInstance(WifiClientsRssiReportDto, wifiClientsReports);
   }
 
   @Post('reports')
