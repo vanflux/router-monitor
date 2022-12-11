@@ -2,5 +2,5 @@
 export const PAGE = {
   HOME: '/',
   LOGIN: '/login',
-  DASHBOARD: '/dashboard',
+  REPORTS_WIFI_FLIENTS: '/reports/wificlients',
 };

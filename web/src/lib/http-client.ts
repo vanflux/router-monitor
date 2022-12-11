@@ -7,6 +7,7 @@ export const httpClient = axios.create({
 
 httpClient.interceptors.request.use((req) => {
   if (!req.headers) req.headers = {};
-  req.headers.authorization = getAuthToken();
+  const token = getAuthToken();
+  req.headers.authorization = token ? `Bearer ${token}` : undefined;
   return req;
 });

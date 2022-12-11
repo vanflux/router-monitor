@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { DashboardPage } from "../pages/dashboard/dashboard.page";
+import { WifiClientsReportsPage } from "../pages/wifi-clients-reports/wifi-clients-reports.page";
 import { HomePage } from "../pages/home/home.page";
 import { LoginPage } from "../pages/login/login.page";
 import { NotFoundPage } from "../pages/not-found/not-found.page";
@@ -16,9 +16,9 @@ export default function Router() {
         <Route path={PAGE.LOGIN}>
           <LoginPage />
         </Route>
-        <Route path={PAGE.DASHBOARD}>
+        <Route path={PAGE.REPORTS_WIFI_FLIENTS}>
           <ProtectedRoute>
-            <DashboardPage />
+            <WifiClientsReportsPage />
           </ProtectedRoute>
         </Route>
         <Route path="*">

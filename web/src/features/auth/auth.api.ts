@@ -7,9 +7,9 @@ import { AuthLoginAdminRequestDto, AuthLoginAdminResponseDto } from "./auth.dto"
 
 export const useAuthLoginAdminMutation = (onSuccess?: () => void) =>
   useMutation({
-    onSuccess: (token) => {
+    onSuccess: (data) => {
       toast.success('Logged sucessfully!');
-      setAuthToken(token);
+      setAuthToken(data.token);
       onSuccess?.();
     },
     onError: (err) => {
@@ -21,6 +21,6 @@ export const useAuthLoginAdminMutation = (onSuccess?: () => void) =>
         }
       }
     },
-    mutationFn: async (data: AuthLoginAdminRequestDto): Promise<string> =>
+    mutationFn: async (data: AuthLoginAdminRequestDto) =>
       httpClient.post<AuthLoginAdminResponseDto>('/auth/login/admin', data).then(res => res.data),
   });

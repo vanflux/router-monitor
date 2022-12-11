@@ -4,4 +4,6 @@ export interface AuthLoginAdminRequestDto {
   password: string;
 }
 
-export type AuthLoginAdminResponseDto = string;
+export interface AuthLoginAdminResponseDto {
+  token: string;
+};
