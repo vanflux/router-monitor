@@ -15,9 +15,10 @@ import { useWifiClientsQuery, useWifiClientsRssiReportsQuery } from "../../featu
 import { useMemo, useState } from "react";
 import 'chartjs-adapter-moment';
 import moment from "moment";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import { GranularitySelector } from "../../components/granularity-selector/granularity-selector";
 import { AgentSelector } from "../../components/agent-selector/agent-selector";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 ChartJS.register(
   CategoryScale,
@@ -65,13 +66,14 @@ const options: ScatterOptions = {
       text: 'Wifi Clients RSSI Reports',
     },
   },
+  animation: false,
 };
 
 export function WifiClientsReportsPage() {
   const [granularity, setGranularity] = useState(15);
   const [agentId, setAgentId] = useState<string>();
   const { data: clients } = useWifiClientsQuery();
-  const { data: reports, isLoading } = useWifiClientsRssiReportsQuery(agentId, granularity);
+  const { data: reports, isFetching, refetch } = useWifiClientsRssiReportsQuery(agentId, granularity);
   const data = useMemo(() => clients && reports ? {
     datasets: clients.map((client, i) => ({
       label: client.name || `Unammed-${i}`,
@@ -98,6 +100,7 @@ export function WifiClientsReportsPage() {
           value={granularity}
           onChange={setGranularity}
           granularities={[
+            { value: 1, label: '1m' },
             { value: 5, label: '5m' },
             { value: 15, label: '15m' },
             { value: 30, label: '30m' },
@@ -105,9 +108,12 @@ export function WifiClientsReportsPage() {
             { value: 60 * 6, label: '6h' },
           ]}
         />
+        <Button onClick={() => refetch()} variant='outlined'>
+          <RefreshIcon />
+        </Button>
       </Grid>
       <Grid container direction='row' mt={2} justifyContent='center' alignItems='center' minHeight={500}>
-        {isLoading ? (
+        {isFetching ? (
           <Box sx={{ display: 'flex' }}>
             <CircularProgress />
           </Box>

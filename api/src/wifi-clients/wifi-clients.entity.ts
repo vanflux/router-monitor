@@ -19,7 +19,10 @@ export class WifiClientsReportClient {
 
 export const WifiClientsReportClientSchema = SchemaFactory.createForClass(WifiClientsReportClient);
 
-@Schema({ id: true, timestamps: { createdAt: true, updatedAt: false } })
+@Schema({
+  id: true,
+  timeseries: { timeField: 'timestamp', metaField: 'agentId', granularity: 'seconds' },
+})
 export class WifiClientsReport extends Document {
   @Prop()
   agentId: string;
@@ -31,7 +34,7 @@ export class WifiClientsReport extends Document {
   clients: WifiClientsReportClient[];
 
   @Prop()
-  createdAt: Date;
+  timestamp: Date;
 }
 
 @Schema({ id: true, timestamps: { createdAt: true, updatedAt: false } })

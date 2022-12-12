@@ -21,17 +21,17 @@ export class WifiClientsService {
     const timeFrom = new Date();
     timeFrom.setHours(timeFrom.getHours() - 24);
     return await this.wifiClientsReportModel.aggregate<WifiClientsRssiReportDto>([
-      { $match: { agentId, createdAt: { $gt: timeFrom } } }, // Filter out irrelevant reports
-      { $addFields: { createdAtParts: { $dateToParts: { date: '$createdAt' } } } }, // Split date into parts
+      { $match: { agentId, timestamp: { $gt: timeFrom } } }, // Filter out irrelevant reports
+      { $addFields: { dateParts: { $dateToParts: { date: '$timestamp' } } } }, // Split date into parts
       { $group: { // Group reports that occur on the same interval
         _id: {
-          year: '$createdAtParts.year',
-          month: '$createdAtParts.month',
-          day: '$createdAtParts.day',
-          hour: '$createdAtParts.hour',
+          year: '$dateParts.year',
+          month: '$dateParts.month',
+          day: '$dateParts.day',
+          hour: '$dateParts.hour',
           minute: { $subtract: [
-            '$createdAtParts.minute',
-            { $mod: [ '$createdAtParts.minute', granularity ] }
+            '$dateParts.minute',
+            { $mod: [ '$dateParts.minute', granularity ] }
           ]}
         },
         reports: { '$addToSet': '$clients' }
@@ -64,11 +64,12 @@ export class WifiClientsService {
 
   async createReport(agentId: string, wifiClientsReport: CreateWifiClientsReportDto) {
     await Promise.all(wifiClientsReport.clients.map(async ({ mac, hostname }) => {
-      await this.wifiClientModel.findOneAndUpdate({ mac }, { mac, name: hostname }, { upsert: true, new: true, setDefaultsOnInsert: true });
+      await this.wifiClientModel.updateOne({ mac }, { $setOnInsert: { mac, name: hostname } }, { upsert: true });
     }));
     const report = await this.wifiClientsReportModel.create({
       ...wifiClientsReport,
       agentId,
+      timestamp: new Date(),
     });
     return report.id;
   }

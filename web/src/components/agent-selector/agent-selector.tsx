@@ -32,7 +32,7 @@ export function AgentSelector({ value, onChange, selectIfEmpty }: AgentSelectorP
     >
       {data?.map(agent => (
         <MenuItem key={agent._id} value={agent._id}>{agent._id}</MenuItem>
-      ))}
+      )) || <MenuItem />}
     </TextField>
   );
 }

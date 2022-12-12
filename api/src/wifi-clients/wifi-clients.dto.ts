@@ -61,7 +61,7 @@ export class WifiClientsReportDto {
   @ApiProperty()
   @Expose()
   @Type(() => Date)
-  createdAt: Date;
+  timestamp: Date;
 }
 
 export class WifiClientsRssiReportClientDto {
@@ -90,7 +90,7 @@ export class CreateWifiClientDto extends OmitType(WifiClientDto, ['_id', 'create
 
 export class CreateWifiClientReportClientDto extends WifiClientReportClientDto {}
 
-export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, ['_id', 'agentId', 'createdAt', 'clients']) {
+export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, ['_id', 'agentId', 'timestamp', 'clients']) {
   @ApiProperty({ type: CreateWifiClientReportClientDto, isArray: true })
   @Expose()
   @Type(() => CreateWifiClientReportClientDto)

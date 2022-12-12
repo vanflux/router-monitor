@@ -14,7 +14,15 @@ export function GranularitySelector({ value, onChange, granularities }: Granular
       <Typography variant='body2'>Granularity</Typography>
       <Grid container gap={1}>
         {granularities.map(granularity => (
-          <Link key={granularity.value} onClick={() => onChange?.(granularity.value)} variant='body2' href="#">{granularity.label}</Link>
+          <Link
+            key={granularity.value}
+            onClick={() => onChange?.(granularity.value)}
+            variant='body2'
+            href="#"
+            border={value === granularity.value ? 1 : undefined}
+            borderRadius={1}
+            paddingX={0.3}
+          >{granularity.label}</Link>
         ))}
       </Grid>
     </Box>
