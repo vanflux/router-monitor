@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import { generate } from 'randomstring';
 import { Agent, AgentDocument } from 'src/agents/agents.entity';
 import { AgentNotFoundException } from 'src/exceptions/agent-not-found.exception';
-import { CreateAgentDto } from './agents.dto';
+import { CreateAgentDto, UpdateAgentDto } from './agents.dto';
 
 @Injectable()
 export class AgentsService {
@@ -17,8 +17,16 @@ export class AgentsService {
     return await this.agentModel.find();
   }
 
+  async getById(id: string): Promise<Agent> {
+    return await this.agentModel.findOne({ _id: new Types.ObjectId(id) });
+  }
+
   async create(createAgentDto: CreateAgentDto): Promise<string> {
     return (await this.agentModel.create({ ...createAgentDto }))._id.toString();
+  }
+
+  async update(updateAgentDto: UpdateAgentDto): Promise<boolean> {
+    return await (await this.agentModel.updateOne({ _id: new Types.ObjectId(updateAgentDto._id) }, { ...updateAgentDto })).acknowledged;
   }
 
   async deleteById(id: string) {

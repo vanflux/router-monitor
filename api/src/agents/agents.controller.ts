@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
 import { AuthToken } from 'src/auth/auth.interface';
-import { AgentListItemDto, CreateAgentDto } from './agents.dto';
+import { AgentDto, AgentListItemDto, CreateAgentDto, UpdateAgentDto } from './agents.dto';
 import { AgentsService } from './agents.service';
 
 @Controller('agents')
@@ -19,6 +19,14 @@ export class AgentsController {
     return plainToInstance(AgentListItemDto, agents.map(agent => agent.toJSON()));
   }
 
+  @Get('/:id')
+  @Authorized('admin')
+  @ApiResponse({ type: AgentListItemDto })
+  async getById(@Param('id') id: string) {
+    const agent = await this.agentsService.getById(id);
+    return plainToInstance(AgentListItemDto, agent.toJSON());
+  }
+
   @Post()
   @Authorized('admin')
   @ApiResponse({ type: String })
@@ -31,6 +39,15 @@ export class AgentsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteById(@Param('id') id: string) {
     return await this.agentsService.deleteById(id);
+  }
+
+  @Patch()
+  @Authorized('admin')
+  @HttpCode(HttpStatus.OK)
+  async update(@Body() updateAgentDto: UpdateAgentDto) {
+    await this.agentsService.update(updateAgentDto);
+    const agent = await this.agentsService.getById(updateAgentDto._id);
+    return plainToInstance(AgentDto, agent.toJSON());
   }
 
   @Post('/:id/secret')

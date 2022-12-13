@@ -8,6 +8,9 @@ export class Agent extends Document {
   @Prop()
   secret: string;
 
+  @Prop()
+  name: string;
+
   @Prop({ default: now() })
   createdAt: Date;
 

@@ -1,12 +1,21 @@
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import { ReactNode } from "react";
 import { Header } from "../header/header";
+import { Sidebar } from "../sidebar/sidebar";
+import './layout.scss';
 
-export function Layout({ children }: { children: JSX.Element }) {
-  return <Grid container item direction='column' wrap='nowrap'>
+export function Layout({ children }: { children: ReactNode }) {
+  return <div className='layout-container'>
     <Header />
-    <Container>
-      {children}
-    </Container>
-  </Grid>
+    <div className='bottom'>
+      <Sidebar />
+      <div className='right'>
+        <Container sx={{ display: 'flex', flexDirection: 'column' }}>
+          <div className='content'>
+            {children}
+          </div>
+        </Container>
+      </div>
+    </div>
+  </div>
 }

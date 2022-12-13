@@ -5,6 +5,7 @@ import { LoginPage } from "../pages/login/login.page";
 import { NotFoundPage } from "../pages/not-found/not-found.page";
 import { PAGE } from "./pages";
 import { ProtectedRoute } from "./protected-route";
+import { AgentsPage } from "../pages/agents/agents.page";
 
 export default function Router() {
   return (
@@ -15,6 +16,11 @@ export default function Router() {
         </Route>
         <Route path={PAGE.LOGIN}>
           <LoginPage />
+        </Route>
+        <Route path={PAGE.AGENTS}>
+          <ProtectedRoute>
+            <AgentsPage />
+          </ProtectedRoute>
         </Route>
         <Route path={PAGE.REPORTS_WIFI_FLIENTS}>
           <ProtectedRoute>

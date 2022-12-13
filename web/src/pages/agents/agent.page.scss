@@ -1,0 +1,15 @@
+
+.agents-page-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .top {
+    margin-top: 16px;
+  }
+}
+
+.agents-page-modal {
+  top: 25%;
+  margin: auto;
+}

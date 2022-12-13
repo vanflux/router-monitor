@@ -1,6 +1,7 @@
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { ReactComponent as Logo } from '../../../assets/logo.svg';
+import { PasswordTextInput } from '../../../components/password-text-input/password-text-input';
 
 export interface LoginFormData {
   username: string;
@@ -27,7 +28,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           name={"username"}
           control={control}
           render={({ field: { onChange, value } }) => (
-            <TextField onChange={onChange} value={value || ''} required variant='outlined' label='Username' aria-describedby='username' />
+            <TextField onChange={onChange} value={value || ''} fullWidth required variant='outlined' label='Username' aria-describedby='username' />
           )}
         />
       </Grid>
@@ -36,7 +37,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           name={"password"}
           control={control}
           render={({ field: { onChange, value } }) => (
-            <TextField onChange={onChange} value={value || ''} required variant='outlined' label='Password' aria-describedby='password' />
+            <PasswordTextInput onChange={onChange} value={value || ''} required variant='outlined' label='Password' aria-describedby='password' />
           )}
         />
       </Grid>

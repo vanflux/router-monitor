@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 
 export class AgentDto {
@@ -10,6 +10,10 @@ export class AgentDto {
   @ApiProperty()
   @Expose()
   secret: string;
+
+  @ApiProperty()
+  @Expose()
+  name: string;
 
   @ApiProperty()
   @Expose()
@@ -28,5 +32,10 @@ export class CreateAgentDto extends OmitType(AgentDto, [
   'createdAt',
   'updatedAt',
 ]) {}
+
+export class UpdateAgentDto extends IntersectionType(
+  PickType(AgentDto, ['_id']),
+  PartialType(CreateAgentDto),
+) {}
 
 export class AgentListItemDto extends AgentDto {}

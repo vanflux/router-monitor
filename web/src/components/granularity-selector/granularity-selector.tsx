@@ -1,6 +1,6 @@
-import { Grid, Typography } from "@mui/material";
-import Box from "@mui/material/Box/Box";
+import { Typography } from "@mui/material";
 import Link from "@mui/material/Link/Link";
+import './granularity-selector.scss';
 
 export interface GranularitySelectorProps {
   value?: number;
@@ -10,9 +10,9 @@ export interface GranularitySelectorProps {
 
 export function GranularitySelector({ value, onChange, granularities }: GranularitySelectorProps) {
   return (
-    <Box sx={{ border: 1, borderRadius: 1, borderColor: 'grey.400' }} paddingX={2} display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
+    <div className='granularity-selector-container'>
       <Typography variant='body2'>Granularity</Typography>
-      <Grid container gap={1}>
+      <div className='granularities'>
         {granularities.map(granularity => (
           <Link
             key={granularity.value}
@@ -24,7 +24,7 @@ export function GranularitySelector({ value, onChange, granularities }: Granular
             paddingX={0.3}
           >{granularity.label}</Link>
         ))}
-      </Grid>
-    </Box>
+      </div>
+    </div>
   );
 }

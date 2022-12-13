@@ -1,0 +1,15 @@
+
+.granularity-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--mui-palette-grey-400);
+  border-radius: 4px;
+  padding: 0px 8px;
+}
+
+.granularities {
+  display: flex;
+  gap: 8px;
+}

@@ -4,5 +4,5 @@ html, body, #root {
   flex: 1;
   margin: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
 }

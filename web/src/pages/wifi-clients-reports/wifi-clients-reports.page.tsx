@@ -19,6 +19,7 @@ import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import { GranularitySelector } from "../../components/granularity-selector/granularity-selector";
 import { AgentSelector } from "../../components/agent-selector/agent-selector";
 import RefreshIcon from '@mui/icons-material/Refresh';
+import './wifi-clients-reports.page.scss';
 
 ChartJS.register(
   CategoryScale,
@@ -93,8 +94,8 @@ export function WifiClientsReportsPage() {
   }, [clients, reports]);
 
   return <Layout>
-    <div>
-      <Grid container direction='row' mt={2} gap={1}>
+    <div className='wifi-clients-reports-page-container'>
+      <div className='top'>
         <AgentSelector selectIfEmpty value={agentId} onChange={agent => setAgentId(agent?._id)}  />
         <GranularitySelector
           value={granularity}
@@ -111,16 +112,14 @@ export function WifiClientsReportsPage() {
         <Button onClick={() => refetch()} variant='outlined'>
           <RefreshIcon />
         </Button>
-      </Grid>
-      <Grid container direction='row' mt={2} justifyContent='center' alignItems='center' minHeight={500}>
+      </div>
+      <div className='bottom'>
         {isFetching ? (
-          <Box sx={{ display: 'flex' }}>
-            <CircularProgress />
-          </Box>
+          <CircularProgress sx={{ display: 'flex' }} />
         ) : (
           <Scatter options={options} data={data} />
         )}
-      </Grid>
+      </div>
     </div>
   </Layout>;
 }
