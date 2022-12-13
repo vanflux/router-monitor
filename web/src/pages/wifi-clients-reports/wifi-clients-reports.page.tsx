@@ -1,27 +1,17 @@
 import { ChartProps, Scatter } from "react-chartjs-2";
 import { Layout } from "../../components/layout/layout";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  TimeScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useWifiClientsQuery, useWifiClientsRssiReportsQuery } from "../../features/wifi-clients/wifi-clients.api";
 import { useMemo, useState } from "react";
-import 'chartjs-adapter-moment';
-import moment from "moment";
-import { Box, Button, CircularProgress, Grid } from "@mui/material";
+import moment, { Moment } from "moment";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import { GranularitySelector } from "../../components/granularity-selector/granularity-selector";
 import { AgentSelector } from "../../components/agent-selector/agent-selector";
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import './wifi-clients-reports.page.scss';
 
-ChartJS.register(
+Chart.register(
   CategoryScale,
   LinearScale,
   TimeScale,
@@ -73,8 +63,11 @@ const options: ScatterOptions = {
 export function WifiClientsReportsPage() {
   const [granularity, setGranularity] = useState(15);
   const [agentId, setAgentId] = useState<string>();
+  const [startDate, setStartDate] = useState<Moment | null>(null);
+  const [endDate, setEndDate] = useState<Moment | null>(null);
+
   const { data: clients } = useWifiClientsQuery();
-  const { data: reports, isFetching, refetch } = useWifiClientsRssiReportsQuery(agentId, granularity);
+  const { data: reports, isFetching, refetch } = useWifiClientsRssiReportsQuery(agentId, granularity, startDate?.toDate(), endDate?.toDate());
   const data = useMemo(() => clients && reports ? {
     datasets: clients.map((client, i) => ({
       label: client.name || `Unammed-${i}`,
@@ -108,6 +101,18 @@ export function WifiClientsReportsPage() {
             { value: 60, label: '1h' },
             { value: 60 * 6, label: '6h' },
           ]}
+        />
+        <DateTimePicker
+          label="Start date"
+          value={startDate}
+          renderInput={(params) => <TextField {...params} />}
+          onChange={setStartDate}
+        />
+        <DateTimePicker
+          label="End date"
+          value={endDate}
+          renderInput={(params) => <TextField {...params} />}
+          onChange={setEndDate}
         />
         <Button onClick={() => refetch()} variant='outlined'>
           <RefreshIcon />

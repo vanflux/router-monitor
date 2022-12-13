@@ -17,11 +17,17 @@ export class WifiClientsService {
     return await this.wifiClientModel.find();
   }
 
-  async getAllRssiReports(agentId: string, granularity: number) {
-    const timeFrom = new Date();
-    timeFrom.setHours(timeFrom.getHours() - 24);
+  async getAllRssiReports(agentId: string, granularity: number, startDate?: Date, endDate?: Date) {
     return await this.wifiClientsReportModel.aggregate<WifiClientsRssiReportDto>([
-      { $match: { agentId, timestamp: { $gt: timeFrom } } }, // Filter out irrelevant reports
+      { $match: {
+        agentId,
+        ...((startDate || endDate) && {
+          timestamp: {
+            ...(startDate && {$gte: startDate}),
+            ...(endDate && {$lte: endDate}),
+          }
+        }),
+      } }, // Filter out irrelevant reports
       { $addFields: { dateParts: { $dateToParts: { date: '$timestamp' } } } }, // Split date into parts
       { $group: { // Group reports that occur on the same interval
         _id: {
