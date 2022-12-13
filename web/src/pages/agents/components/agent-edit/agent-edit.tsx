@@ -4,10 +4,10 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import ConfirmationDialog from "../../../../components/confirmation-dialog/confirmation-dialog";
 import { PasswordTextInput } from "../../../../components/password-text-input/password-text-input";
 import { useAgentByIdQuery, useRegenAgentSecretMutation, useUpdateAgentMutation } from "../../../../features/agents/agents.api";
-import { AgentDto, UpdateAgentDto } from "../../../../features/agents/agents.dto";
+import { UpdateAgentDto } from "../../../../features/agents/agents.dto";
+import ConfirmationDialog from "../../../../components/confirmation-dialog/confirmation-dialog";
 import './agent-edit.scss';
 
 export interface AgentEditProps {
@@ -18,18 +18,15 @@ export interface AgentEditProps {
 export function AgentEdit({ id, onClose }: AgentEditProps) {
   const { data: agent } = useAgentByIdQuery(id);
 
-  const { mutate: update } = useUpdateAgentMutation(() => {
-    toast.error('Failed to update agent!');
-  }, () => {
-    toast.success('Agent updated!');
-    onClose?.();
-  });
+  const { mutate: update } = useUpdateAgentMutation(
+    () => toast.error('Failed to update agent!'),
+    () => (toast.success('Agent updated!'), onClose?.())
+  );
 
-  const { mutate: regenSecret } = useRegenAgentSecretMutation(() => {
-    toast.error('Failed to update secret!');
-  }, () => {
-    toast.success('Secret regenerated!');
-  });
+  const { mutate: regenSecret } = useRegenAgentSecretMutation(
+    () => toast.error('Failed to update secret!'),
+    () => toast.success('Secret regenerated!'),
+  );
 
   const [regenSecretConfirmOpen, setRegenSecretConfirmOpen] = useState(false);
 
