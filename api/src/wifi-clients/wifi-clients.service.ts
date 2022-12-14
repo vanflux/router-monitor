@@ -17,7 +17,7 @@ export class WifiClientsService {
     return await this.wifiClientModel.find();
   }
 
-  async getAllRssiReports(agentId: string, granularity: number, startDate?: Date, endDate?: Date) {
+  async getAllRssiReports(agentId: string, precision: number, startDate?: Date, endDate?: Date) {
     return await this.wifiClientsReportModel.aggregate<WifiClientsRssiReportDto>([
       { $match: {
         agentId,
@@ -27,32 +27,15 @@ export class WifiClientsService {
             ...(endDate && {$lte: endDate}),
           }
         }),
-      } }, // Filter out irrelevant reports
-      { $addFields: { dateParts: { $dateToParts: { date: '$timestamp' } } } }, // Split date into parts
-      { $group: { // Group reports that occur on the same interval
-        _id: {
-          year: '$dateParts.year',
-          month: '$dateParts.month',
-          day: '$dateParts.day',
-          hour: '$dateParts.hour',
-          minute: { $subtract: [
-            '$dateParts.minute',
-            { $mod: [ '$dateParts.minute', granularity ] }
-          ]}
+      }}, // Filter out irrelevant reports
+      { $bucketAuto: {
+        groupBy: '$timestamp',
+        buckets: precision,
+        output: {
+          reports: {
+            $push: '$clients',
+          },
         },
-        reports: { '$addToSet': '$clients' }
-      }},
-      { $project: { // Re-build date based on interval parts
-        reports: '$reports',
-        date: {
-          $dateFromParts: {
-            year: '$_id.year',
-            month: '$_id.month',
-            day: '$_id.day',
-            hour: '$_id.hour',
-            minute: '$_id.minute'
-          }
-        }
       }},
       { $unwind: { path: '$reports' } }, // Unwind grouped reports
       { $unwind: { path: '$reports' } }, // Unwind clients inside reports
@@ -60,9 +43,9 @@ export class WifiClientsService {
         _id: { _id: '$_id', mac: '$reports.mac' },
         mac: { $first: '$reports.mac' },
         rssi: { $avg: '$reports.rssi' },
-        date: { $first: '$date' }
+        date: { $first: '$_id.min' }
       }},
-      { $group: { _id: '$date', clients: { $addToSet: { mac: '$mac', rssi: '$rssi' } } } }, // Group reports
+      { $group: { _id: '$date', clients: { $push: { mac: '$mac', rssi: '$rssi' } } } }, // Group reports
       { $project: { clients: '$clients', date: '$_id' } }, // Format documents
       { $sort: { date: 1 } }, // Sort by date asc
     ]);

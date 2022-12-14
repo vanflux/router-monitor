@@ -4,16 +4,16 @@ import { WifiClientDto, WifiClientsRssiReportDto } from "./wifi-clients.dto";
 
 export const useWifiClientsRssiReportsQuery = (
   agentId?: string,
-  granularity?: number,
+  precision?: number,
   startDate?: Date,
   endDate?: Date
 ) =>
   useQuery({
-    queryKey: ['wificlients', 'reports', 'rssi', agentId, granularity, startDate, endDate],
-    enabled: !!agentId && !!granularity,
+    queryKey: ['wificlients', 'reports', 'rssi', agentId, precision, startDate, endDate],
+    enabled: !!agentId && !!precision,
     queryFn: () =>
       httpClient.get<WifiClientsRssiReportDto[]>(`/wificlients/reports/rssi/agent/${agentId}`, {
-        params: { granularity, startDate, endDate }
+        params: { precision, startDate, endDate }
       }).then(res => res.data),
   });
 

@@ -1,7 +1,7 @@
 
 export interface WifiClientsRssiReportClientDto {
   mac: string;
-  rssi: string;
+  rssi: number;
 }
 
 export interface WifiClientsRssiReportDto {

@@ -24,13 +24,13 @@ export class WifiClientsController {
   @ApiResponse({ type: WifiClientsRssiReportDto })
   async getAllRssiReports(
     @Param('agentId') agentId: string,
-    @Query('granularity', ParseIntPipe) granularity: number,
+    @Query('precision', ParseIntPipe) precision: number,
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
   ) {
     const startDate = startDateStr ? new Date(startDateStr) : undefined;
     const endDate = endDateStr ? new Date(endDateStr) : undefined;
-    const wifiClientsReports = await this.wifiClientsService.getAllRssiReports(agentId, granularity, startDate, endDate);
+    const wifiClientsReports = await this.wifiClientsService.getAllRssiReports(agentId, precision, startDate, endDate);
     return plainToInstance(WifiClientsRssiReportDto, wifiClientsReports);
   }
 

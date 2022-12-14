@@ -5,7 +5,7 @@ import { useWifiClientsQuery, useWifiClientsRssiReportsQuery } from "../../featu
 import { useMemo, useState } from "react";
 import moment, { Moment } from "moment";
 import { Button, CircularProgress, TextField } from "@mui/material";
-import { GranularitySelector } from "../../components/granularity-selector/granularity-selector";
+import { PrecisionSelector } from "../../components/precision-selector/precision-selector";
 import { AgentSelector } from "../../components/agent-selector/agent-selector";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -61,50 +61,61 @@ const options: ScatterOptions = {
 };
 
 export function WifiClientsReportsPage() {
-  const [granularity, setGranularity] = useState(15);
+  const [precision, setPrecision] = useState(75);
   const [agentId, setAgentId] = useState<string>();
-  const [startDate, setStartDate] = useState<Moment | null>(null);
+  const [startDate, setStartDate] = useState<Moment | null>(moment().subtract(1, 'day'));
   const [endDate, setEndDate] = useState<Moment | null>(null);
 
   const { data: clients } = useWifiClientsQuery();
-  const { data: reports, isFetching, refetch } = useWifiClientsRssiReportsQuery(agentId, granularity, startDate?.toDate(), endDate?.toDate());
-  const data = useMemo(() => clients && reports ? {
-    datasets: clients.map((client, i) => ({
-      label: client.name || `Unammed-${i}`,
-      data: reports.flatMap((report, i) => {
-        const date: moment.Moment = moment(report.date);
-        const c = report.clients.find(c => c.mac === client.mac);
-        const result = [{ x: date, y: c?.rssi || null }];
-        const lastReport = reports[i-1] || report;
-        const lastDate: moment.Moment = moment(lastReport.date);
-        if (date.diff(lastDate, 'minutes') > granularity) result.unshift({x: lastDate, y: null});
-        return result;
-      }),
-      borderColor: 'hsl(' + (360 * i / clients.length) + ', 100%, 50%)',
-    })),
-  } : {
-    datasets: [],
+  const { data: reports, isFetching, refetch } = useWifiClientsRssiReportsQuery(agentId, precision, startDate?.toDate(), endDate?.toDate());
+  const data = useMemo(() => {
+    if (clients && reports?.length) {
+      // Calculate threshold for considering reports break or not
+      const threshold = reports
+      .slice(1)
+      .map((report, i) => moment(report.date).diff(moment(reports[i].date), 'minutes'))
+      .sort((a, b) => b - a)
+      .slice(Math.floor(reports.length * 0.2))
+      .reduce((a, b) => a + b) / (reports.length * 0.2);
+
+      return {
+        datasets: clients.map((client, i) => ({
+          label: client.name || `Unammed-${i}`,
+          data: reports.flatMap((report, i) => {
+            const date = moment(report.date);
+            const rssi = report.clients.find(c => c.mac === client.mac)?.rssi || null;
+            const result = [{ x: date, y: rssi }];
+            const lastReport = reports[i-1] || report;
+            const lastDate = moment(lastReport.date);
+            if (date.diff(lastDate, 'minutes') > threshold) result.unshift({x: lastDate, y: null});
+            return result;
+          }),
+          borderColor: 'hsl(' + (360 * i / clients.length) + ', 100%, 50%)',
+        })),
+      };
+    }
+    return { datasets: [] }
   }, [clients, reports]);
 
   return <Layout>
     <div className='wifi-clients-reports-page-container'>
       <div className='top'>
         <AgentSelector selectIfEmpty value={agentId} onChange={agent => setAgentId(agent?._id)}  />
-        <GranularitySelector
-          value={granularity}
-          onChange={setGranularity}
-          granularities={[
-            { value: 1, label: '1m' },
-            { value: 5, label: '5m' },
-            { value: 15, label: '15m' },
-            { value: 30, label: '30m' },
-            { value: 60, label: '1h' },
-            { value: 60 * 6, label: '6h' },
+        <PrecisionSelector
+          value={precision}
+          onChange={setPrecision}
+          precisions={[
+            { value: 10, label: '10' },
+            { value: 25, label: '25' },
+            { value: 50, label: '50' },
+            { value: 75, label: '75' },
+            { value: 100, label: '100' },
           ]}
         />
         <DateTimePicker
           label="Start date"
           value={startDate}
+          closeOnSelect={false}
           renderInput={(params) => <TextField {...params} />}
           onChange={setStartDate}
         />
