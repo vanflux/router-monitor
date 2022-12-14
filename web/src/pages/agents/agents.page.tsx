@@ -1,6 +1,6 @@
 import { AgentList } from "./components/agent-list/agent-list";
 import { AgentEdit } from "./components/agent-edit/agent-edit";
-import { AgentDto } from "../../features/agents/agents.dto";
+import { AgentDto } from "../../api/agents/agents.dto";
 import { IconButton, Grid, Modal } from "@mui/material";
 import { Layout } from "../../components/layout/layout";
 import { useState } from "react";

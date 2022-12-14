@@ -1,7 +1,7 @@
 import { ChartProps, Scatter } from "react-chartjs-2";
 import { Layout } from "../../components/layout/layout";
 import { Chart, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { useWifiClientsQuery, useWifiClientsRssiReportsQuery } from "../../features/wifi-clients/wifi-clients.api";
+import { useWifiClientsQuery, useWifiClientsRssiReportsQuery } from "../../api/wifi-clients/wifi-clients.api";
 import { useMemo, useState } from "react";
 import moment, { Moment } from "moment";
 import { Button, CircularProgress, TextField } from "@mui/material";
@@ -63,7 +63,7 @@ const options: ScatterOptions = {
 export function WifiClientsReportsPage() {
   const [precision, setPrecision] = useState(75);
   const [agentId, setAgentId] = useState<string>();
-  const [startDate, setStartDate] = useState<Moment | null>(moment().subtract(1, 'day'));
+  const [startDate, setStartDate] = useState<Moment | null>(moment().subtract(6, 'hours'));
   const [endDate, setEndDate] = useState<Moment | null>(null);
 
   const { data: clients } = useWifiClientsQuery();

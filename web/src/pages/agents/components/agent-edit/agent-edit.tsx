@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PasswordTextInput } from "../../../../components/password-text-input/password-text-input";
-import { useAgentByIdQuery, useRegenAgentSecretMutation, useUpdateAgentMutation } from "../../../../features/agents/agents.api";
-import { UpdateAgentDto } from "../../../../features/agents/agents.dto";
+import { useAgentByIdQuery, useRegenAgentSecretMutation, useUpdateAgentMutation } from "../../../../api/agents/agents.api";
+import { UpdateAgentDto } from "../../../../api/agents/agents.dto";
 import ConfirmationDialog from "../../../../components/confirmation-dialog/confirmation-dialog";
 import './agent-edit.scss';
 

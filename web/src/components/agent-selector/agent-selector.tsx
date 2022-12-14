@@ -1,8 +1,8 @@
 import MenuItem from "@mui/material/MenuItem/MenuItem";
 import TextField from "@mui/material/TextField/TextField";
 import { useEffect } from "react";
-import { useAgentsQuery } from "../../features/agents/agents.api";
-import { AgentDto } from "../../features/agents/agents.dto";
+import { useAgentsQuery } from "../../api/agents/agents.api";
+import { AgentDto } from "../../api/agents/agents.dto";
 
 export interface AgentSelectorProps {
   value?: string;

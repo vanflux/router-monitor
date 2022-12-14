@@ -1,9 +1,9 @@
 import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useAgentsQuery } from "../../../../features/agents/agents.api";
+import { useAgentsQuery } from "../../../../api/agents/agents.api";
 import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
-import { AgentDto } from "../../../../features/agents/agents.dto";
+import { AgentDto } from "../../../../api/agents/agents.dto";
 
 export interface AgentListProps {
   onEditClick?: (agent: AgentDto) => void;

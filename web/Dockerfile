@@ -3,6 +3,8 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
+ARG API_BASE_URL
+ENV VITE_API_BASE_URL "$API_BASE_URL"
 RUN yarn build
 
 FROM nginx:alpine
