@@ -12,6 +12,7 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   const authService = app.get(AuthService);
   const transformOptions = { excludeExtraneousValues: true };
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ transformOptions }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector, transformOptions));
   app.useGlobalGuards(new AuthGuards(reflector, authService));

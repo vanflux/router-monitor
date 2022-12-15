@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAuthToken } from "../stores/auth.store";
 
 export const httpClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.PROD ? '/api' : 'http://localhost:3000/api',
 });
 
 httpClient.interceptors.request.use((req) => {
