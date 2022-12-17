@@ -1,7 +1,7 @@
 FROM node:16-alpine as builder
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --no-cache && yarn cache clean
 COPY . .
 ARG API_BASE_URL
 ENV VITE_API_BASE_URL "$API_BASE_URL"

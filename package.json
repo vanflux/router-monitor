@@ -13,7 +13,15 @@
     "down:dev:db": "docker-compose -f docker-compose.dev.yml rm -f -s -v db mongo-express",
     "down:dev:agent": "docker-compose -f docker-compose.dev.yml rm -f -s -v agent",
     "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -f -s -v api",
-    "down:dev:web": "docker-compose -f docker-compose.dev.yml rm -f -s -v web"
+    "down:dev:web": "docker-compose -f docker-compose.dev.yml rm -f -s -v web",
+    "build": "npm run build:agent && npm run build:api && npm run build:web",
+    "build:agent": "docker build -t vanflux/rm-agent agent",
+    "build:api": "docker build -t vanflux/rm-api api",
+    "build:web": "docker build -t vanflux/rm-web web",
+    "docker:push": "npm run docker:push:agent && npm run docker:push:api && npm run docker:push:web",
+    "docker:push:agent": "docker push vanflux/rm-agent",
+    "docker:push:api": "docker push vanflux/rm-api",
+    "docker:push:web": "docker push vanflux/rm-web"
   },
   "engines": {
     "node": ">= 16",
