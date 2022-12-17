@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
 import { AuthToken } from 'src/auth/auth.interface';
-import { CreateWifiClientsReportDto, WifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
+import { CreateWifiClientsReportDto, UpdateWifiClientDto, WifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
 import { WifiClientsService } from './wifi-clients.service';
 
 @Controller('wificlients')
@@ -17,6 +17,23 @@ export class WifiClientsController {
   async getAllClients() {
     const wifiClients = await this.wifiClientsService.getAllClients();
     return plainToInstance(WifiClientDto, wifiClients.map(item => item.toJSON()));
+  }
+
+  @Get(':id')
+  @Authorized('admin')
+  @ApiResponse({ type: WifiClientDto })
+  async getClientById(@Param('id') id: string) {
+    const wifiClient = await this.wifiClientsService.getClientById(id);
+    return plainToInstance(WifiClientDto, wifiClient.toJSON());
+  }
+
+  @Patch()
+  @Authorized('admin')
+  @ApiResponse({ type: WifiClientDto })
+  async updateClient(@Body() updateWifiClientDto: UpdateWifiClientDto) {
+    await this.wifiClientsService.updateClient(updateWifiClientDto);
+    const wifiClient = await this.wifiClientsService.getClientById(updateWifiClientDto._id);
+    return plainToInstance(WifiClientDto, wifiClient.toJSON());
   }
 
   @Get('reports/rssi/agent/:agentId')

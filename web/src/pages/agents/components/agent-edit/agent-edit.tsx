@@ -50,7 +50,14 @@ export function AgentEdit({ id, onClose }: AgentEditProps) {
     <Controller
       name='name'
       control={control}
-      render={({ field }) => <TextField label='Name' {...field} value={field.value || ''} />}
+      render={({ field }) => (
+        <TextField
+          label='Name'
+          inputRef={input => input && input.focus()}
+          {...field}
+          value={field.value || ''}
+        />
+      )}
     />
     <div className='regen-secret'>
       <PasswordTextInput value={agent?.secret || ''} className='secret-input' disabled type='password' label='Secret' />

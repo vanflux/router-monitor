@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateWifiClientsReportDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
+import { Model, Types } from 'mongoose';
+import { CreateWifiClientsReportDto, UpdateWifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
 import { WifiClient, WifiClientDocument, WifiClientsReport, WifiClientsReportDocument } from './wifi-clients.entity';
 
 @Injectable()
@@ -15,6 +15,10 @@ export class WifiClientsService {
   
   async getAllClients() {
     return await this.wifiClientModel.find();
+  }
+  
+  async getClientById(id: string) {
+    return await this.wifiClientModel.findOne({ _id: new Types.ObjectId(id) });
   }
 
   async getAllRssiReports(agentId: string, precision: number, startDate?: Date, endDate?: Date) {
@@ -49,6 +53,10 @@ export class WifiClientsService {
       { $project: { clients: '$clients', date: '$_id' } }, // Format documents
       { $sort: { date: 1 } }, // Sort by date asc
     ]);
+  }
+
+  async updateClient(updateWifiClientDto: UpdateWifiClientDto) {
+    return await (await this.wifiClientModel.updateOne({ _id: new Types.ObjectId(updateWifiClientDto._id) }, { $set: { name: updateWifiClientDto.name } })).acknowledged;
   }
 
   async createReport(agentId: string, wifiClientsReport: CreateWifiClientsReportDto) {

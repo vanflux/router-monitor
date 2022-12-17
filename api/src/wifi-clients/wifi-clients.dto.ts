@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 
 export class WifiClientDto {
@@ -96,3 +96,8 @@ export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, [
   @Type(() => CreateWifiClientReportClientDto)
   clients: CreateWifiClientReportClientDto[];
 }
+
+export class UpdateWifiClientDto extends IntersectionType(
+  PickType(WifiClientDto, ['_id']),
+  PartialType(CreateWifiClientDto),
+) {}

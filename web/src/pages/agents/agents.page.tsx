@@ -5,7 +5,7 @@ import { IconButton, Grid, Modal } from "@mui/material";
 import { Layout } from "../../components/layout/layout";
 import { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import './agent.page.scss';
+import './agents.page.scss';
 
 export function AgentsPage() {
   const [editingAgent, setEditingAgent] = useState<AgentDto>();

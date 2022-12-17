@@ -30,9 +30,10 @@ const options: ScatterOptions = {
   spanGaps: false,
   datasets: {
     scatter: {
-      pointRadius: 1,
+      pointRadius: 2,
       fill: false,
-      pointHoverRadius: 1
+      pointHitRadius: 10,
+      pointHoverRadius: 2
     }
   },
   scales: {
@@ -71,16 +72,16 @@ export function WifiClientsReportsPage() {
   const data = useMemo(() => {
     if (clients && reports?.length) {
       // Calculate threshold for considering reports break or not
-      const threshold = reports
+      const diffs = reports
       .slice(1)
       .map((report, i) => moment(report.date).diff(moment(reports[i].date), 'minutes'))
       .sort((a, b) => b - a)
-      .slice(Math.floor(reports.length * 0.2))
-      .reduce((a, b) => a + b) / (reports.length * 0.2);
+      .slice(Math.floor(reports.length * 0.2));
+      const threshold = diffs.length >= 2 ? diffs.reduce((a, b) => a + b) / (reports.length * 0.2) : 0;
 
       return {
         datasets: clients.map((client, i) => ({
-          label: client.name || `Unammed-${i}`,
+          label: client.name || client.mac,
           data: reports.flatMap((report, i) => {
             const date = moment(report.date);
             const rssi = report.clients.find(c => c.mac === client.mac)?.rssi || null;

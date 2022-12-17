@@ -28,7 +28,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           name={"username"}
           control={control}
           render={({ field: { onChange, value } }) => (
-            <TextField onChange={onChange} value={value || ''} fullWidth required variant='outlined' label='Username' aria-describedby='username' />
+            <TextField autoFocus onChange={onChange} value={value || ''} fullWidth required variant='outlined' label='Username' aria-describedby='username' />
           )}
         />
       </Grid>
@@ -42,7 +42,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         />
       </Grid>
       <Grid mb={1}>
-        <Button onClick={handleSubmit(onSubmit)} fullWidth variant='contained'>Login</Button>
+        <Button type='submit' onClick={handleSubmit(onSubmit)} fullWidth variant='contained'>Login</Button>
       </Grid>
     </form>
   </Grid>;
