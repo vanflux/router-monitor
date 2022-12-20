@@ -1,4 +1,4 @@
 
 export function isValidMac(mac: string) {
-  return !!mac.match(/^\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{2}$/);
+  return !!mac.match(/^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/);
 }

@@ -10,7 +10,7 @@ export class ClientRestriction extends Document {
   clientId: ObjectId;
 
   @Prop()
-  active: string;
+  active: boolean;
 
   @Prop()
   createdAt: Date;

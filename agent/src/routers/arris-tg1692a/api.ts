@@ -1,15 +1,15 @@
-import request, { CoreOptions, Request, RequestAPI, RequiredUriUrl } from 'request';
 import { RouterException } from '../../exceptions/router-exception';
 import { RouterLoginException } from '../../exceptions/router-login-exception';
 import { RouterUnauthorizedException } from '../../exceptions/router-unauthorized-exception';
+import { createHttpClient, HttpClient } from '../../lib/http-client';
 import { RouterApi } from '../router-api';
 
 export class ArrisTG1692AApi implements RouterApi {
-  private httpClient: RequestAPI<Request, CoreOptions, RequiredUriUrl>;
+  private httpClient: HttpClient;
   private credential: string | undefined;
 
   constructor(url: string) {
-    this.httpClient = request.defaults({ baseUrl: url });
+    this.httpClient = createHttpClient({ baseUrl: url });
   }
 
   async login(username: string, password: string): Promise<void> {

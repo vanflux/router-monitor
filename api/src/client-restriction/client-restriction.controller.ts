@@ -5,15 +5,15 @@ import { Authorized } from 'src/auth/auth.decorator';
 import { CreateClientRestrictionDto, UpdateClientRestrictionDto, ClientRestrictionDto } from './client-restriction.dto';
 import { ClientRestrictionService } from './client-restriction.service';
 
-@Controller('clientRestriction')
-@ApiTags('clientRestriction')
+@Controller('clientrestrictions')
+@ApiTags('clientrestrictions')
 export class ClientRestrictionController {
   constructor(private readonly clientRestrictionService: ClientRestrictionService) {}
 
   @Get()
-  @Authorized('admin')
+  @Authorized('admin', 'agent')
   @ApiResponse({ type: ClientRestrictionDto })
-  async getAllC() {
+  async getAll() {
     const clientRestrictions = await this.clientRestrictionService.getAll();
     return plainToInstance(ClientRestrictionDto, clientRestrictions.map(item => item.toJSON()));
   }

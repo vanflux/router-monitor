@@ -12,7 +12,7 @@ export class WifiClientsController {
   constructor(private readonly wifiClientsService: WifiClientsService) {}
 
   @Get()
-  @Authorized('admin')
+  @Authorized('admin', 'agent')
   @ApiResponse({ type: WifiClientDto })
   async getAllClients() {
     const wifiClients = await this.wifiClientsService.getAllClients();

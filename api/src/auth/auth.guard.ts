@@ -26,9 +26,11 @@ export class AuthGuards implements CanActivate {
       }
     }
 
-    if (authorizedTypes.includes('agent') && !req.authToken?.agent) throw new UnauthorizedException();
-    if (authorizedTypes.includes('admin') && !req.authToken?.admin) throw new UnauthorizedException();
-    
-    return true;
+    if (
+      (authorizedTypes.includes('agent') && req.authToken?.agent) ||
+      (authorizedTypes.includes('admin') && req.authToken?.admin)
+    ) return true;
+
+    throw new UnauthorizedException();
   }
 }
