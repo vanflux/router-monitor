@@ -1,0 +1,15 @@
+
+.client-restrictions-page-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .top {
+    margin-top: 16px;
+  }
+}
+
+.client-restrictions-page-modal {
+  top: 25%;
+  margin: auto;
+}
