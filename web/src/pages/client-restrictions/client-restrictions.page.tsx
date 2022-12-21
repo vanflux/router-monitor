@@ -1,5 +1,5 @@
 import { ClientRestrictionList } from "./components/client-restriction-list/client-restriction-list";
-import { ClientRestrictionEdit } from "./components/client-restriction-edit/client-restriction-edit";
+import { ClientRestrictionModal } from "./components/client-restriction-modal/client-restriction-modal";
 import { ClientRestrictionDto } from "../../api/client-restrictions/client-restrictions.dto";
 import { IconButton, Grid, Modal } from "@mui/material";
 import { Layout } from "../../components/layout/layout";
@@ -8,17 +8,24 @@ import AddIcon from '@mui/icons-material/Add';
 import './client-restrictions.page.scss';
 
 export function ClientRestrictionsPage() {
+  const [isCreating, setIsCreating] = useState(false);
   const [editingClientRestriction, setEditingClientRestriction] = useState<ClientRestrictionDto>();
 
+  const onAddClick = () => {
+    setIsCreating(true);
+  };
   const onEditClick = (clientRestriction: ClientRestrictionDto) => {
     setEditingClientRestriction(clientRestriction);
   };
-  const closeModal = () => setEditingClientRestriction(undefined);
+  const closeModals = () => {
+    setIsCreating(false);
+    setEditingClientRestriction(undefined);
+  };
 
   return <Layout>
     <div className='client-restrictions-page-container'>
       <div className='top'>
-        <IconButton color='primary' >
+        <IconButton onClick={onAddClick} color='primary' >
           <AddIcon />
         </IconButton>
       </div>
@@ -28,12 +35,12 @@ export function ClientRestrictionsPage() {
         </Grid>
       </div>
       <Modal
-        open={!!editingClientRestriction}
-        onClose={closeModal}
+        open={!!editingClientRestriction || isCreating}
+        onClose={closeModals}
         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
         <div className='client-restrictions-page-modal'>
-          {editingClientRestriction && <ClientRestrictionEdit id={editingClientRestriction._id} onClose={closeModal} />}
+          <ClientRestrictionModal editing={!isCreating} id={editingClientRestriction?._id} onClose={closeModals} />
         </div>
       </Modal>
     </div>

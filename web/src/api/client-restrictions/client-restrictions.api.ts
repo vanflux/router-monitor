@@ -10,8 +10,9 @@ export const useClientRestrictionsQuery = () =>
       httpClient.get<ClientRestrictionDto[]>(`/clientrestrictions`).then(res => res.data),
   });
 
-export const useClientRestrictionByIdQuery = (id: string) =>
+export const useClientRestrictionByIdQuery = (id?: string) =>
   useQuery({
+    enabled: !!id,
     queryKey: ['clientrestrictions', id],
     queryFn: () =>
       httpClient.get<ClientRestrictionDto>(`/clientrestrictions/${id}`).then(res => res.data),
