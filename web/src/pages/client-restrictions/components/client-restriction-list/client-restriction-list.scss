@@ -1,0 +1,25 @@
+
+.client-restriction-list-container {
+	.active-cell {
+		display: flex;
+		align-items: center;
+
+		.active, .inactive {
+			width: 16px;
+			height: 16px;
+			border-radius: 50%;
+		}
+	
+		.active {
+			background-color: rgb(68, 240, 62);
+		}
+	
+		.inactive {
+			background-color: rgb(240, 62, 62);
+		}
+
+		.text {
+			margin-left: 4px;
+		}
+	}
+}

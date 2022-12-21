@@ -2,9 +2,11 @@ import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useClientRestrictionsQuery } from "../../../../api/client-restrictions/client-restrictions.api";
 import { ClientRestrictionDto } from "../../../../api/client-restrictions/client-restrictions.dto";
+import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
 import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
-import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
+import "./client-restriction-list.scss";
+import { Typography } from "@mui/material";
 
 export interface ClientRestrictionListProps {
   onEditClick?: (clientRestriction: ClientRestrictionDto) => void;
@@ -23,7 +25,15 @@ export function ClientRestrictionList({ onEditClick }: ClientRestrictionListProp
       flex: 1,
       valueFormatter: ({ value }: any) => wifiClients?.find(wifiClient => wifiClient._id === value)?.name,
     },
-    { field: 'active', headerName: 'Active', flex: 1, valueFormatter: ({ value }: any) => value ? 'Yes' : 'No' },
+    {
+      field: 'active',
+      headerName: 'Active',
+      flex: 1,
+      renderCell: ({ value }) => <div className='active-cell'>
+        <div className={value ? 'active' : 'inactive'} />
+        <Typography variant='body2' className='text'>{value ? 'Yes' : 'No'}</Typography>
+      </div>,
+    },
     {
       field: 'createdAt',
       headerName: 'Creation Date',
@@ -55,5 +65,9 @@ export function ClientRestrictionList({ onEditClick }: ClientRestrictionListProp
     },
   ];
 
-  return <DataGrid autoHeight rows={rows} columns={columns} />;
+  return (
+    <div className='client-restriction-list-container'>
+      <DataGrid autoHeight rows={rows} columns={columns} />
+    </div>
+  );
 }

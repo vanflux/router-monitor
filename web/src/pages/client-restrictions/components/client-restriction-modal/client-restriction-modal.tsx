@@ -55,9 +55,7 @@ export function ClientRestrictionModal({ editing, id, onClose }: ClientRestricti
       name='active'
       control={control}
       render={({ field }) => (
-        <FormGroup>
-          <FormControlLabel control={<Checkbox {...field} checked={field.value || false} />} label="Active" />
-        </FormGroup>
+        <FormControlLabel control={<Checkbox {...field} checked={field.value || false} />} label="Active" />
       )}
     />
     <Button type='submit' variant='contained'>Save</Button>
