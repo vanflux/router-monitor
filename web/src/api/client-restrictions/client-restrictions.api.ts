@@ -39,3 +39,14 @@ export const useUpdateClientRestrictionMutation = (onError?: () => void, onSucce
     mutationFn: (updateClientRestrictionDto: UpdateClientRestrictionDto) =>
       httpClient.patch<ClientRestrictionDto>('/clientrestrictions', updateClientRestrictionDto).then(res => res.data),
   })
+
+export const useDeleteClientRestrictionMutation = (onError?: () => void, onSuccess?: () => void) =>
+  useMutation({
+    onError,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['clientrestrictions']);
+      onSuccess?.();
+    },
+    mutationFn: (id: string) =>
+      httpClient.delete<ClientRestrictionDto>(`/clientrestrictions/${id}`).then(res => res.data),
+  })

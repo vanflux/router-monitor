@@ -1,7 +1,7 @@
 import { ClientRestrictionList } from "./components/client-restriction-list/client-restriction-list";
 import { ClientRestrictionModal } from "./components/client-restriction-modal/client-restriction-modal";
-import { ClientRestrictionDto } from "../../api/client-restrictions/client-restrictions.dto";
-import { IconButton, Grid, Modal } from "@mui/material";
+import { ClientRestrictionDeleteDialog } from "./components/client-restriction-delete-dialog/client-restriction-delete-dialog";
+import { IconButton, Grid } from "@mui/material";
 import { Layout } from "../../components/layout/layout";
 import { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
@@ -9,17 +9,26 @@ import './client-restrictions.page.scss';
 
 export function ClientRestrictionsPage() {
   const [isCreating, setIsCreating] = useState(false);
-  const [editingClientRestriction, setEditingClientRestriction] = useState<ClientRestrictionDto>();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [deletingId, setDeletingId] = useState<string>();
+  const [editingId, setEditingId] = useState<string>();
 
   const onAddClick = () => {
     setIsCreating(true);
   };
-  const onEditClick = (clientRestriction: ClientRestrictionDto) => {
-    setEditingClientRestriction(clientRestriction);
+  const onEditClick = (id: string) => {
+    setEditingId(id);
+    setIsEditing(true);
   };
-  const closeModals = () => {
+  const onDeleteClick = (id: string) => {
+    setDeletingId(id);
+    setIsDeleting(true);
+  };
+  const closeOverlays = () => {
     setIsCreating(false);
-    setEditingClientRestriction(undefined);
+    setIsDeleting(false);
+    setIsEditing(false);
   };
 
   return <Layout>
@@ -31,18 +40,20 @@ export function ClientRestrictionsPage() {
       </div>
       <div className='bottom'>
         <Grid container direction='column' my={2} gap={1}>
-          <ClientRestrictionList onEditClick={onEditClick} />
+          <ClientRestrictionList onEditClick={onEditClick} onDeleteClick={onDeleteClick} />
         </Grid>
       </div>
-      <Modal
-        open={!!editingClientRestriction || isCreating}
-        onClose={closeModals}
-        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-      >
-        <div className='client-restrictions-page-modal'>
-          <ClientRestrictionModal editing={!isCreating} id={editingClientRestriction?._id} onClose={closeModals} />
-        </div>
-      </Modal>
+      <ClientRestrictionModal
+        open={isEditing || isCreating}
+        editing={!isCreating}
+        id={editingId}
+        onClose={closeOverlays}
+      />
+      <ClientRestrictionDeleteDialog
+        open={isDeleting}
+        id={deletingId}
+        onClose={closeOverlays}
+      />
     </div>
   </Layout>;
 }

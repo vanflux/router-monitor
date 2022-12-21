@@ -1,18 +1,19 @@
 import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useClientRestrictionsQuery } from "../../../../api/client-restrictions/client-restrictions.api";
-import { ClientRestrictionDto } from "../../../../api/client-restrictions/client-restrictions.dto";
 import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from "moment";
 import "./client-restriction-list.scss";
 import { Typography } from "@mui/material";
 
 export interface ClientRestrictionListProps {
-  onEditClick?: (clientRestriction: ClientRestrictionDto) => void;
+  onEditClick?: (id: string) => void;
+  onDeleteClick?: (id: string) => void;
 }
 
-export function ClientRestrictionList({ onEditClick }: ClientRestrictionListProps) {
+export function ClientRestrictionList({ onEditClick, onDeleteClick }: ClientRestrictionListProps) {
   const { data: wifiClients } = useWifiClientsQuery();
   const { data: clientRestrictions } = useClientRestrictionsQuery();
   const rows = clientRestrictions?.map(clientRestriction => ({ ...clientRestriction, id: clientRestriction._id })) || [];
@@ -51,16 +52,14 @@ export function ClientRestrictionList({ onEditClick }: ClientRestrictionListProp
       headerName: 'Actions',
       flex: 1,
       renderCell(cell) {
-        const onClick = () => {
-          const clientRestriction = clientRestrictions?.find(clientRestriction => clientRestriction._id === String(cell.id));
-          if (clientRestriction) onEditClick?.(clientRestriction);
-        };
-
-        return (
-          <IconButton onClick={onClick}>
+        return <>
+          <IconButton onClick={() => onEditClick?.(String(cell.id))}>
             <EditIcon color='primary' />
           </IconButton>
-        );
+          <IconButton onClick={() => onDeleteClick?.(String(cell.id))}>
+            <DeleteIcon color='error' />
+          </IconButton>
+        </>;
       },
     },
   ];
