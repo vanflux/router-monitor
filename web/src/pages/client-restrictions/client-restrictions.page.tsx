@@ -14,9 +14,7 @@ export function ClientRestrictionsPage() {
   const [deletingId, setDeletingId] = useState<string>();
   const [editingId, setEditingId] = useState<string>();
 
-  const onAddClick = () => {
-    setIsCreating(true);
-  };
+  const onAddClick = () => setIsCreating(true);
   const onEditClick = (id: string) => {
     setEditingId(id);
     setIsEditing(true);
@@ -45,7 +43,7 @@ export function ClientRestrictionsPage() {
       </div>
       <ClientRestrictionModal
         open={isEditing || isCreating}
-        editing={!isCreating}
+        editing={isEditing}
         id={editingId}
         onClose={closeOverlays}
       />

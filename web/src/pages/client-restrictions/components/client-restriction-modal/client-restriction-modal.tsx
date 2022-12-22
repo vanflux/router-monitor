@@ -37,8 +37,9 @@ export function ClientRestrictionModal({ open, editing, id, onClose }: ClientRes
   const clientId = watch('clientId');
 
   useEffect(() => {
-    if (fetchedClientRestriction) reset(fetchedClientRestriction);
-  }, [fetchedClientRestriction]);
+    if (open && !editing) reset({});
+    if (open && editing && fetchedClientRestriction) reset(fetchedClientRestriction);
+  }, [open, fetchedClientRestriction]);
 
   return (
     <Modal

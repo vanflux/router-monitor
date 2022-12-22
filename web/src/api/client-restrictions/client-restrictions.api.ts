@@ -48,5 +48,5 @@ export const useDeleteClientRestrictionMutation = (onError?: () => void, onSucce
       onSuccess?.();
     },
     mutationFn: (id: string) =>
-      httpClient.delete<ClientRestrictionDto>(`/clientrestrictions/${id}`).then(res => res.data),
+      httpClient.delete<boolean>(`/clientrestrictions/${id}`).then(res => res.data),
   })

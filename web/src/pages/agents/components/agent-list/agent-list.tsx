@@ -2,14 +2,15 @@ import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useAgentsQuery } from "../../../../api/agents/agents.api";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from "moment";
-import { AgentDto } from "../../../../api/agents/agents.dto";
 
 export interface AgentListProps {
-  onEditClick?: (agent: AgentDto) => void;
+  onEditClick?: (id: string) => void;
+  onDeleteClick?: (id: string) => void;
 }
 
-export function AgentList({ onEditClick }: AgentListProps) {
+export function AgentList({ onEditClick, onDeleteClick }: AgentListProps) {
   const { data: agents } = useAgentsQuery();
   const rows = agents?.map(agent => ({ ...agent, id: agent._id })) || [];
 
@@ -33,16 +34,14 @@ export function AgentList({ onEditClick }: AgentListProps) {
       headerName: 'Actions',
       flex: 1,
       renderCell(cell) {
-        const onClick = () => {
-          const agent = agents?.find(agent => agent._id === String(cell.id));
-          if (agent) onEditClick?.(agent);
-        };
-
-        return (
-          <IconButton onClick={onClick}>
+        return <>
+          <IconButton onClick={() => onEditClick?.(String(cell.id))}>
             <EditIcon color='primary' />
           </IconButton>
-        );
+          <IconButton onClick={() => onDeleteClick?.(String(cell.id))}>
+            <DeleteIcon color='error' />
+          </IconButton>
+        </>;
       },
     },
   ];
