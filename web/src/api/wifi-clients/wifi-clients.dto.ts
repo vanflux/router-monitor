@@ -16,4 +16,4 @@ export interface WifiClientDto {
   createdAt: string;
 }
 
-export type UpdateWifiClientDto = Omit<WifiClientDto, '_id' | 'mac' | 'createdAt'>;
+export type UpdateWifiClientDto = Omit<WifiClientDto, 'mac' | 'createdAt'>;

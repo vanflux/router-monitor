@@ -3,10 +3,9 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
 import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
-import { WifiClientDto } from "../../../../api/wifi-clients/wifi-clients.dto";
 
 export interface WifiClientListProps {
-  onEditClick?: (wifiClient: WifiClientDto) => void;
+  onEditClick?: (id: string) => void;
 }
 
 export function WifiClientList({ onEditClick }: WifiClientListProps) {
@@ -28,13 +27,8 @@ export function WifiClientList({ onEditClick }: WifiClientListProps) {
       headerName: 'Actions',
       flex: 1,
       renderCell(cell) {
-        const onClick = () => {
-          const wifiClient = wifiClients?.find(wifiClient => wifiClient._id === String(cell.id));
-          if (wifiClient) onEditClick?.(wifiClient);
-        };
-
         return (
-          <IconButton onClick={onClick}>
+          <IconButton onClick={() => onEditClick?.(String(cell.id))}>
             <EditIcon color='primary' />
           </IconButton>
         );

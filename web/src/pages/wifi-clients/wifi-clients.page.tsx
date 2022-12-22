@@ -1,41 +1,26 @@
 import { WifiClientList } from "./components/wifi-client-list/wifi-client-list";
-import { WifiClientEdit } from "./components/wifi-client-edit/wifi-client-edit";
-import { WifiClientDto } from "../../api/wifi-clients/wifi-clients.dto";
-import { IconButton, Grid, Modal } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Layout } from "../../components/layout/layout";
 import { useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
 import './wifi-clients.page.scss';
+import { WifiClientModal } from "./components/wifi-client-modal/wifi-client-modal";
 
 export function WifiClientsPage() {
-  const [editingWifiClient, setEditingWifiClient] = useState<WifiClientDto>();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState<string>();
 
-  const onEditClick = (wifiClient: WifiClientDto) => {
-    setEditingWifiClient(wifiClient);
+  const onEditClick = (id: string) => {
+    setEditingId(id);
+    setIsEditing(true);
   };
-  const closeModal = () => setEditingWifiClient(undefined);
+  const closeModal = () => setIsEditing(false);
 
   return <Layout>
     <div className='wifi-clients-page-container'>
-      <div className='top'>
-        <IconButton color='primary' >
-          <AddIcon />
-        </IconButton>
-      </div>
-      <div className='bottom'>
-        <Grid container direction='column' my={2} gap={1}>
-          <WifiClientList onEditClick={onEditClick} />
-        </Grid>
-      </div>
-      <Modal
-        open={!!editingWifiClient}
-        onClose={closeModal}
-        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-      >
-        <div className='wifi-clients-page-modal'>
-          {editingWifiClient && <WifiClientEdit id={editingWifiClient._id} onClose={closeModal} />}
-        </div>
-      </Modal>
+      <Grid container direction='column' my={2} gap={1}>
+        <WifiClientList onEditClick={onEditClick} />
+      </Grid>
+      <WifiClientModal open={isEditing} id={editingId} onClose={closeModal} />
     </div>
   </Layout>;
 }

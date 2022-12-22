@@ -1,4 +1,6 @@
+import { Redirect } from "react-router-dom";
+import { PAGE } from "../../router/pages";
 
 export function NotFoundPage() {
-  return <div>Page Not Found</div>;
+  return <Redirect to={PAGE.HOME} />;
 }

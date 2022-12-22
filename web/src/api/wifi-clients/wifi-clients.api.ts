@@ -25,8 +25,9 @@ export const useWifiClientsQuery = () =>
       httpClient.get<WifiClientDto[]>(`/wificlients`).then(res => res.data),
   });
 
-export const useWifiClientByIdQuery = (id: string) =>
+export const useWifiClientByIdQuery = (id?: string) =>
   useQuery({
+    enabled: !!id,
     queryKey: ['wificlients', 'clients', id],
     queryFn: () =>
       httpClient.get<WifiClientDto>(`/wificlients/${id}`).then(res => res.data),
