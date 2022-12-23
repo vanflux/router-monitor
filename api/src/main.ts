@@ -13,7 +13,7 @@ async function bootstrap() {
   const authService = app.get(AuthService);
   const transformOptions = { excludeExtraneousValues: true };
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({ transformOptions }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, transformOptions }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector, transformOptions));
   app.useGlobalGuards(new AuthGuards(reflector, authService));
   app.enableCors();
