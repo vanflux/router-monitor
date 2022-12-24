@@ -29,7 +29,7 @@ export class SchedulesService {
     if (existentJob) existentJob.stop();
     const job = new CronJob(
       cron,
-      () => this.actionsRunnerService.run(action),
+      () => this.actionsRunnerService.run(action).catch(exc => this.logger.error(exc)),
       null,
       true,
       this.configService.get('tz', { infer: true }),
@@ -54,7 +54,7 @@ export class SchedulesService {
 
   async create(createScheduleDto: CreateScheduleDto): Promise<string> {
     const id = (await this.scheduleModel.create({ ...createScheduleDto }))._id.toString();
-    if (createScheduleDto.enabled) this.ensureJobStarted(id, createScheduleDto.cron, createScheduleDto.action);
+    if (createScheduleDto.active) this.ensureJobStarted(id, createScheduleDto.cron, createScheduleDto.action);
     return id;
   }
 
@@ -62,8 +62,8 @@ export class SchedulesService {
     const { acknowledged } = await (await this.scheduleModel.updateOne({ _id: new Types.ObjectId(updateScheduleDto._id) }, { ...updateScheduleDto }));
     if (!acknowledged) return false;
     const schedule = await this.getById(updateScheduleDto._id);
-    if (schedule.enabled) this.ensureJobStarted(String(schedule._id), schedule.cron, schedule.action);
-    if (!schedule.enabled) this.ensureJobStopped(String(schedule._id));
+    if (schedule.active) this.ensureJobStarted(String(schedule._id), schedule.cron, schedule.action);
+    if (!schedule.active) this.ensureJobStopped(String(schedule._id));
     return true;
   }
 
@@ -82,7 +82,7 @@ export class SchedulesService {
       const schedules = await this.getAll();
       schedules.forEach(schedule => {
         try {
-          if (schedule.enabled) this.ensureJobStarted(String(schedule.id), schedule.cron, schedule.action);
+          if (schedule.active) this.ensureJobStarted(String(schedule.id), schedule.cron, schedule.action);
         } catch (exc) {
           this.logger.error({
             schedule,

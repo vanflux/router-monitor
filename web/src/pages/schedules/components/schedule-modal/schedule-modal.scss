@@ -1,0 +1,24 @@
+
+.schedule-modal-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background-color: var(--mui-palette-common-background);
+  border-radius: 4px;
+
+  .cron {
+    margin-top: 8px;
+  }
+}
+
+.schedule-modal {
+  top: 25%;
+  min-width: 300px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.react-js-cron-select-dropdown {
+  z-index: 10000;
+}

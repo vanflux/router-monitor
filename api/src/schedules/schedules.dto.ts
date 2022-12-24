@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType, OmitType, PartialType, PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
+import { IsBoolean, isBoolean, IsDate, IsDefined, IsString, ValidateNested } from "class-validator";
 import { Action } from "src/action/actions.entity";
 import { ValidateCron } from "./schedules.decorator";
 
@@ -8,29 +8,35 @@ export class ScheduleDto {
   @ApiProperty()
   @Expose()
   @Type(() => String)
+  @IsString()
   _id: string;
 
-  @ApiProperty({ example: '* * * * * *' })
+  @ApiProperty({ example: '* * * * *' })
   @ValidateCron()
   @Expose()
+  @IsString()
   cron: string;
 
   @Expose()
   @ValidateNested()
+  @IsDefined()
   @ApiProperty({ type: Action })
   action: Action;
 
   @ApiProperty({ example: true })
   @Expose()
-  enabled: boolean;
+  @IsBoolean()
+  active: boolean;
 
   @ApiProperty()
   @Expose()
+  @IsDate()
   @Type(() => Date)
   createdAt: Date;
 
   @ApiProperty()
   @Expose()
+  @IsDate()
   @Type(() => Date)
   updatedAt: Date;
 }

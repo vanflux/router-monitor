@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
+import { IsDefined, IsNotEmptyObject, IsObject, ValidateNested } from "class-validator";
 import { Document, HydratedDocument, now } from "mongoose";
 
 export class ActionData {}
@@ -31,6 +31,9 @@ export class Action<ActionData=any> {
   @Expose()
   @ApiProperty({ example: { type: 'log', message: 'Hello world!' }})
   @ValidateNested()
+  @IsDefined()
+  @IsNotEmptyObject()
+  @IsObject()
 	@Type(() => ActionData, {
     keepDiscriminatorProperty: true,
     discriminator: {

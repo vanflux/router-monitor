@@ -6,4 +6,5 @@ export const PAGE = {
   WIFI_FLIENTS: '/wificlients',
   REPORTS_WIFI_FLIENTS: '/reports/wificlients',
   CLIENT_RESTRICTIONS: '/clientrestrictions',
+  SCHEDULES: '/schedules',
 };

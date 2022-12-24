@@ -13,7 +13,7 @@ export class Schedule extends Document {
   action: Action;
 
   @Prop()
-  enabled: boolean;
+  active: boolean;
 
   @Prop({ default: now() })
   createdAt: Date;
