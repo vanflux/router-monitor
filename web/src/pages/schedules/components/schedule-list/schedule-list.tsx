@@ -16,7 +16,7 @@ export function ScheduleList({ onEditClick, onDeleteClick }: ScheduleListProps) 
 
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'Id', flex: 1 },
-    { field: 'name', headerName: 'Name', flex: 1 },
+    { field: 'cron', headerName: 'Cron', flex: 1 },
     {
       field: 'createdAt',
       headerName: 'Creation Date',
