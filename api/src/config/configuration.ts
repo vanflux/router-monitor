@@ -1,5 +1,6 @@
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
+  tz: process.env.TZ || 'America/Sao_Paulo',
   db: {
     uri: process.env.DB_URI || 'mongodb://user:pass@localhost:27017',
   },

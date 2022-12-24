@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { WifiClientsModule } from './wifi-clients/wifi-clients.module';
 import { ClientRestrictionModule } from './client-restriction/client-restriction.module';
 import { ActionsModule } from './action/actions.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ActionsModule } from './action/actions.module';
     WifiClientsModule,
     ClientRestrictionModule,
     ActionsModule,
+    SchedulesModule,
   ],
   controllers: [],
   providers: [],

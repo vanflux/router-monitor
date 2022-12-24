@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ActionLog, ActionLogDocument, ActionResult, BaseAction, LogAction } from "./actions.entity";
+import { ActionLog, ActionLogDocument, ActionResult, Action, LogActionData } from "./actions.entity";
 
 @Injectable()
 export class ActionsRunnerService {
@@ -10,9 +10,10 @@ export class ActionsRunnerService {
     private readonly actionLogModel: Model<ActionLogDocument>,
   ) {}
 
-	async run(action: BaseAction): Promise<ActionResult> {
-    if (action instanceof LogAction) {
-      await this.actionLogModel.create({ message: action.message });
+	async run(action: Action): Promise<ActionResult> {
+    const data = action.data;
+    if (data instanceof LogActionData) {
+      await this.actionLogModel.create({ message: data.message });
       return new ActionResult(true, { message: 'Log saved!' });
     } else {
       return new ActionResult(false);

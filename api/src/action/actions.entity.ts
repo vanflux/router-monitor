@@ -1,13 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Expose } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
+import { Expose, Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
 import { Document, HydratedDocument, now } from "mongoose";
 
-export class BaseAction {
-  @Expose()
-  type: string;
-}
+export class ActionData {}
 
-export class LogAction extends BaseAction {
+export class LogActionData extends ActionData {
   @Expose()
   type: 'log';
 
@@ -26,6 +25,22 @@ export class ActionResult {
     this.success = success;
     this.data = data;
   }
+}
+
+export class Action<ActionData=any> {
+  @Expose()
+  @ApiProperty({ example: { type: 'log', message: 'Hello world!' }})
+  @ValidateNested()
+	@Type(() => ActionData, {
+    keepDiscriminatorProperty: true,
+    discriminator: {
+      property: 'type',
+      subTypes: [
+        { value: LogActionData, name: 'log' },
+      ],
+    },
+  })
+  data: ActionData;
 }
 
 export type ActionLogDocument = HydratedDocument<ActionLog>;
