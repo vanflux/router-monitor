@@ -1,7 +1,11 @@
 
 .wifi-clients-reports-page-container {
+  display: flex;
+  flex-direction: column;
+
   > .top {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 16px;
     gap: 8px;
   }
@@ -11,6 +15,7 @@
     margin-top: 16px;
     justify-content: center;
     align-items: center;
-    min-height: 500px;
+    min-height: 400px;
+    position: relative;
   }
 }

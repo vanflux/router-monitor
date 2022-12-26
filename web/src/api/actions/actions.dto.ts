@@ -12,3 +12,9 @@ export interface LogActionDataDto {
   type: 'log';
   message: string;
 }
+
+export interface ClientRestrictionActiveActionDataDto {
+  type: 'client-restriction:active';
+  clientId: string;
+  active: boolean;
+}

@@ -24,6 +24,7 @@ export function WifiClientSelector({ value, onChange, selectIfEmpty }: WifiClien
       select
       label='Wifi Client'
       value={value || ''}
+      fullWidth
       onChange={(event) => {
         const _id = event.target.value;
         const wifiClient = data?.find(wifiClient => wifiClient._id === _id);

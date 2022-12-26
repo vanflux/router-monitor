@@ -2,5 +2,8 @@
 .action-editor-container {
 	.sub-editor {
 		margin-top: 8px;
+    border: 1px solid var(--mui-palette-grey-400);
+    border-radius: 4px;
+    padding: 8px 8px;
 	}
 }

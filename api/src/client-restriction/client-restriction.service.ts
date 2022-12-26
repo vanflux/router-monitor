@@ -18,6 +18,10 @@ export class ClientRestrictionService {
   async getById(id: string) {
     return await this.clientRestrictionModel.findOne({ _id: new Types.ObjectId(id) });
   }
+  
+  async getByClientId(clientId: string) {
+    return await this.clientRestrictionModel.findOne({ clientId });
+  }
 
   async update(updateClientRestrictionDto: UpdateClientRestrictionDto) {
     return await (await this.clientRestrictionModel.updateOne({

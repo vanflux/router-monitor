@@ -29,6 +29,6 @@ export class ClientRestrictionDto {
 export class CreateClientRestrictionDto extends OmitType(ClientRestrictionDto, ['_id', 'createdAt', 'updatedAt']) {}
 
 export class UpdateClientRestrictionDto extends IntersectionType(
-  PickType(ClientRestrictionDto, ['_id']),
+  PickType(ClientRestrictionDto, ['_id'] as const),
   PartialType(CreateClientRestrictionDto),
 ) {}

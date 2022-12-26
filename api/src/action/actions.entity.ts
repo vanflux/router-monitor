@@ -14,6 +14,17 @@ export class LogActionData extends ActionData {
   message: string;
 }
 
+export class ClientRestrictionActiveActionData extends ActionData {
+  @Expose()
+  type: 'client-restriction:active';
+
+  @Expose()
+  clientId: string;
+
+  @Expose()
+  active: boolean;
+}
+
 export class ActionResult {
   @Expose()
   success: boolean;
@@ -40,6 +51,7 @@ export class Action<ActionData=any> {
       property: 'type',
       subTypes: [
         { value: LogActionData, name: 'log' },
+        { value: ClientRestrictionActiveActionData, name: 'client-restriction:active' },
       ],
     },
   })

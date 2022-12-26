@@ -4,6 +4,7 @@ import { useSchedulesQuery } from "../../../../api/schedules/schedules.api";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from "moment";
+import { ActiveLabel } from "../../../../components/active-label/active-label";
 
 export interface ScheduleListProps {
   onEditClick?: (id: string) => void;
@@ -17,6 +18,12 @@ export function ScheduleList({ onEditClick, onDeleteClick }: ScheduleListProps) 
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'Id', flex: 1 },
     { field: 'cron', headerName: 'Cron', flex: 1 },
+    {
+      field: 'active',
+      headerName: 'Active',
+      flex: 1,
+      renderCell: ({ value }: any) => <ActiveLabel value={value} />,
+    },
     {
       field: 'createdAt',
       headerName: 'Creation Date',

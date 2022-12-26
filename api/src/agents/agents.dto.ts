@@ -34,7 +34,7 @@ export class CreateAgentDto extends OmitType(AgentDto, [
 ]) {}
 
 export class UpdateAgentDto extends IntersectionType(
-  PickType(AgentDto, ['_id']),
+  PickType(AgentDto, ['_id'] as const),
   PartialType(CreateAgentDto),
 ) {}
 

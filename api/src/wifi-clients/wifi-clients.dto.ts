@@ -98,6 +98,6 @@ export class CreateWifiClientsReportDto extends OmitType(WifiClientsReportDto, [
 }
 
 export class UpdateWifiClientDto extends IntersectionType(
-  PickType(WifiClientDto, ['_id']),
+  PickType(WifiClientDto, ['_id'] as const),
   PartialType(CreateWifiClientDto),
 ) {}

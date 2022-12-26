@@ -7,7 +7,7 @@ insert_final_newline = true
 [*.{js,ts}]
 max_line_length = 100
 
-[*.{js,ts,json}]
+[*.{js,jsx,ts,tsx,css,scss,json}]
 charset = utf-8
 indent_style = space
 indent_size = 2

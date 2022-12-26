@@ -26,6 +26,7 @@ export type ScatterOptions = ChartProps<"scatter">['options'];
 
 const options: ScatterOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   showLine: true,
   spanGaps: false,
   datasets: {

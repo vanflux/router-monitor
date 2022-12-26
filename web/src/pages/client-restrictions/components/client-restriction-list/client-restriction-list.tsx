@@ -2,11 +2,10 @@ import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useClientRestrictionsQuery } from "../../../../api/client-restrictions/client-restrictions.api";
 import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
+import { ActiveLabel } from "../../../../components/active-label/active-label";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from "moment";
-import "./client-restriction-list.scss";
-import { Typography } from "@mui/material";
 
 export interface ClientRestrictionListProps {
   onEditClick?: (id: string) => void;
@@ -30,10 +29,7 @@ export function ClientRestrictionList({ onEditClick, onDeleteClick }: ClientRest
       field: 'active',
       headerName: 'Active',
       flex: 1,
-      renderCell: ({ value }) => <div className='active-cell'>
-        <div className={value ? 'active' : 'inactive'} />
-        <Typography variant='body2' className='text'>{value ? 'Yes' : 'No'}</Typography>
-      </div>,
+      renderCell: ({ value }) => <ActiveLabel value={value} />
     },
     {
       field: 'createdAt',

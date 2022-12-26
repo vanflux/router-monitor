@@ -48,6 +48,6 @@ export class CreateScheduleDto extends OmitType(ScheduleDto, [
 ]) {}
 
 export class UpdateScheduleDto extends IntersectionType(
-  PickType(ScheduleDto, ['_id']),
+  PickType(ScheduleDto, ['_id'] as const),
   PartialType(CreateScheduleDto),
 ) {}
