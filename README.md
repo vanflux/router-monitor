@@ -24,6 +24,11 @@ An application to monitor and control routers anywhere, why not???
 - Api: Server that provide all possible actions to agents and admin users through Web.
 - Web: Dashboard for admin users manage routers.
 
+# Routers Support
+
+Sorry I don't have all routers, just one, an Arris Router.
+If you want to add support for your router, reverse engineer the admin page and implement functions on `agent/src/routers` that retrieve client list and block or unblock mac addresses.
+
 # Web
 
 ## Wifi Clients Report
