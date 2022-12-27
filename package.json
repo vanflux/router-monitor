@@ -14,11 +14,11 @@
     "down:dev:agent": "docker-compose -f docker-compose.dev.yml rm -f -s -v agent",
     "down:dev:api": "docker-compose -f docker-compose.dev.yml rm -f -s -v api",
     "down:dev:web": "docker-compose -f docker-compose.dev.yml rm -f -s -v web",
-    "build": "yarn build:agent & yarn build:api & yarn build:web",
+    "build": "yarn build:agent && yarn build:api && yarn build:web",
     "build:agent": "docker build -t vanflux/rm-agent agent",
     "build:api": "docker build -t vanflux/rm-api api",
     "build:web": "docker build -t vanflux/rm-web web",
-    "setup-env": "yarn setup-env:agent & yarn setup-env:api",
+    "setup-env": "yarn setup-env:agent && yarn setup-env:api",
     "setup-env:agent": "cd api && yarn setup-env",
     "setup-env:api": "cd api && yarn setup-env"
   },
