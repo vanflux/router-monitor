@@ -1,16 +1,105 @@
-# Router Monitor
-Application to monitor and control router anywhere, why not?
+<h1 align="center">
+  Router Monitor <img src="./docs/images/logo.svg" />
+</h1>
+
+<p align="center">
+An application to monitor and control routers anywhere, why not???
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/docker/v/vanflux/rm-agent?color=%23bbbb00&label=vanflux%2Frm-agent" />
+  <img src="https://img.shields.io/docker/v/vanflux/rm-api?color=%23cc00cc&label=vanflux%2Frm-api" />
+  <img src="https://img.shields.io/docker/v/vanflux/rm-web?color=%2300cccc&label=vanflux%2Frm-web" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/docker/image-size/vanflux/rm-agent?color=%23bbbb00&label=vanflux%2Frm-agent" />
+  <img src="https://img.shields.io/docker/image-size/vanflux/rm-api?color=%23cc00cc&label=vanflux%2Frm-api" />
+  <img src="https://img.shields.io/docker/image-size/vanflux/rm-web?color=%2300cccc&label=vanflux%2Frm-web" />
+</p>
+
+# Applications
+
+- Agent: Application that interacts with the Api and your router to get wifi clients and apply restrictions to it.
+- Api: Server that provide all possible actions to agents and admin users through Web.
+- Web: Dashboard for admin users manage routers.
+
+# Web
+
+## Wifi Clients Report
+
+![](./docs/images/web-home.png)
+
+## Schedules
+
+![](./docs/images/web-schedules-modal.png)
+
+# Api
+
+Start and visit [http://127.0.0.1:3000/api](http://127.0.0.1:3000/api) route for documentation
+
+![](./docs/images/api-swagger.png)
+
+# Agent
+
+![](./docs/images/agent-terminal.png)
+
+# Usage
+
+Requirement:
+- Docker
+- Docker-compose
+
+Normally `db+api+web` is separated from `agent`, you can have multiple agents running on different locations.
+
+- docker-compose.yml:
+  ```yml
+  version: '3.1'
+
+  services:
+    mongo:
+      image: mongo
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: user
+        MONGO_INITDB_ROOT_PASSWORD: pass
+
+    rm-api:
+      image: vanflux/rm-api
+      ports:
+        - 3000:3000
+      environment:
+        DB_URI: mongodb://user:pass@mongo:27017
+        JWT_SECRET: jwt-secret
+        ADMIN_USER: admin
+        ADMIN_PASS: admin
+
+    rm-web:
+      image: vanflux/rm-web
+      ports:
+        - 80:80
+      environment:
+        API_BASE_URL: http://localhost:3000/api
+
+    rm-agent:
+      image: vanflux/rm-agent
+      environment:
+        ROUTER_TYPE: simulated
+        ROUTER_URL: http://192.168.0.1
+        ROUTER_ADMIN_USER: admin
+        ROUTER_ADMIN_PASS: password
+        AGENT_ID: agent-id
+        AGENT_SECRET: agent-secret
+        COORDINATOR_URL: http://rm-api:3000/api
+        WIFI_CLIENTS_REPORT_INTERVAL: 30
+        CLIENT_RESTRICTION_INTERVAL: 30
+  ```
 
 # Usage (development)
 
 - Install dependencies with `yarn` command on each folder (agent, api, web)
-
-- Place a `.env` on `api` (empty or not)
-
-- Place a `.env` on `agent` (empty or not)
-
-- At this point you can choose what services you want to run<br>
-  You can up only a few services to run the others with `yarn start` individually:<br>
-  Run `yarn up:dev:{db|agent|api|web}`<br>
-  Or you can run all:<br>
-  Run `yarn up:dev`
+- Run `yarn setup-env` to setup .env's
+- Run `yarn up:dev:db` to start database
+- If you want to start the Agent, go to `agent` and run `yarn start`
+- If you want to start the Api, go to `api` and run `yarn start`
+- If you want to start the Web, go to `web` and run `yarn start`
+- If you want to start everything on docker, just run `yarn up:dev`

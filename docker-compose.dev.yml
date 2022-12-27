@@ -49,6 +49,7 @@ services:
       #AGENT_SECRET:
       COORDINATOR_URL: http://api:3000/api
       WIFI_CLIENTS_REPORT_INTERVAL: 30
+      CLIENT_RESTRICTION_INTERVAL: 30
 
   web:
     build: ./web

@@ -10,6 +10,7 @@ ENV VITE_API_BASE_URL "$API_BASE_URL"
 RUN yarn build
 
 FROM nginx:alpine
+COPY nginx-gen-env.sh /docker-entrypoint.d
 COPY nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist .

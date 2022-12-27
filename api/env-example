@@ -1,0 +1,6 @@
+PORT=3000
+TZ=America/Sao_Paulo
+DB_URI=mongodb://user:pass@localhost:27017
+JWT_SECRET=jwt-secret
+ADMIN_USER=admin
+ADMIN_PASS=admin

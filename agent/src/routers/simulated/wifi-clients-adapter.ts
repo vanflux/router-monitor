@@ -9,25 +9,25 @@ export class SimulatedWifiClientsAdapter implements WifiClients {
   async list(): Promise<SimulatedWifiClientItem[]> {
     return [
       {
-        hostName: 'test-user',
+        hostName: 'User 1',
         ipAddress: '192.168.0.2',
         mac: '11:22:33:44:55:66',
         rssi: Math.floor(40 + Math.random() * 30),
       },
       {
-        hostName: 'test-user',
+        hostName: 'User 1',
         ipAddress: '192.168.0.3',
         mac: '11:22:33:44:55:66',
         rssi: Math.floor(40 + Math.random() * 30),
       },
       {
-        hostName: 'test-user2',
+        hostName: 'User 2',
         ipAddress: '192.168.0.4',
         mac: '55:11:22:33:44:55',
         rssi: Math.floor(10 + Math.random() * 30),
       },
       {
-        hostName: 'test-user3',
+        hostName: 'User 2',
         ipAddress: '192.168.0.5',
         mac: '55:11:22:33:44:55',
         rssi: Math.floor(10 + Math.random() * 30),
