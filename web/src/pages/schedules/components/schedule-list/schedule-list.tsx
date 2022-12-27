@@ -53,5 +53,5 @@ export function ScheduleList({ onEditClick, onDeleteClick }: ScheduleListProps) 
     },
   ];
 
-  return <DataGrid autoHeight rows={rows} columns={columns} />;
+  return <DataGrid autoPageSize rows={rows} columns={columns} />;
 }

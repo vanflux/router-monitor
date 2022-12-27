@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { IsDefined, IsNotEmptyObject, IsObject, ValidateNested } from "class-validator";
-import { Document, HydratedDocument, now } from "mongoose";
+import { Document, HydratedDocument } from "mongoose";
 
 export class ActionData {}
 
@@ -65,7 +65,7 @@ export class ActionLog extends Document {
   @Prop()
   message: string;
 
-  @Prop({ default: now() })
+  @Prop()
   createdAt: Date;
 }
 

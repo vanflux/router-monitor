@@ -5,12 +5,16 @@ import { ClientRestrictionService } from "src/client-restriction/client-restrict
 import { ActionLog, ActionLogDocument, ActionResult, Action, LogActionData, ClientRestrictionActiveActionData } from "./actions.entity";
 
 @Injectable()
-export class ActionsRunnerService {
+export class ActionsService {
   constructor(
     @InjectModel(ActionLog.name)
     private readonly actionLogModel: Model<ActionLogDocument>,
     private readonly clientRestrictionService: ClientRestrictionService,
   ) {}
+
+  async getActionLogs() {
+    return await this.actionLogModel.find();
+  }
 
 	async run(action: Action): Promise<ActionResult> {
     const data = action.data;

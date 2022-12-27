@@ -5,6 +5,12 @@
   flex: 1;
 
   .top {
+    display: flex;
     margin-top: 16px;
+  }
+
+  .bottom {
+    display: flex;
+    flex: 1;
   }
 }

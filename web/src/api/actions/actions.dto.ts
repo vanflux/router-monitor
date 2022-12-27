@@ -18,3 +18,10 @@ export interface ClientRestrictionActiveActionDataDto {
   clientId: string;
   active: boolean;
 }
+
+export interface ActionLogDto {
+  _id: string;
+  message: string;
+  createdAt: string;
+}
+

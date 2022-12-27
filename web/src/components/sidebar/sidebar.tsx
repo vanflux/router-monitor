@@ -11,5 +11,6 @@ export function Sidebar() {
     <Button onClick={() => history.push(PAGE.REPORTS_WIFI_FLIENTS)} fullWidth variant='outlined'>Wifi Clients Report</Button>
     <Button onClick={() => history.push(PAGE.CLIENT_RESTRICTIONS)} fullWidth variant='outlined'>Client Restrictions</Button>
     <Button onClick={() => history.push(PAGE.SCHEDULES)} fullWidth variant='outlined'>Schedules</Button>
+    <Button onClick={() => history.push(PAGE.ACTION_LOGS)} fullWidth variant='outlined'>Action Logs</Button>
   </div>
 }

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument, now, Types } from 'mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 export type AgentDocument = HydratedDocument<Agent>;
 
@@ -11,10 +11,10 @@ export class Agent extends Document {
   @Prop()
   name: string;
 
-  @Prop({ default: now() })
+  @Prop()
   createdAt: Date;
 
-  @Prop({ default: now() })
+  @Prop()
   updatedAt: Date;
 }
 

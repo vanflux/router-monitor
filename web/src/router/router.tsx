@@ -9,6 +9,7 @@ import { AgentsPage } from "../pages/agents/agents.page";
 import { WifiClientsPage } from "../pages/wifi-clients/wifi-clients.page";
 import { ClientRestrictionsPage } from "../pages/client-restrictions/client-restrictions.page";
 import { SchedulesPage } from "../pages/schedules/schedules.page";
+import { ActionLogsPage } from "../pages/action-logs/action-logs.page";
 
 export default function Router() {
   return (
@@ -43,6 +44,11 @@ export default function Router() {
         <Route path={PAGE.SCHEDULES}>
           <ProtectedRoute>
             <SchedulesPage />
+          </ProtectedRoute>
+        </Route>
+        <Route path={PAGE.ACTION_LOGS}>
+          <ProtectedRoute>
+            <ActionLogsPage />
           </ProtectedRoute>
         </Route>
         <Route path="*">

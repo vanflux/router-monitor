@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, HydratedDocument, now } from "mongoose";
+import { Document, HydratedDocument } from "mongoose";
 import { Action } from "src/action/actions.entity";
 
 export type ScheduleDocument = HydratedDocument<Schedule>;
@@ -15,10 +15,10 @@ export class Schedule extends Document {
   @Prop()
   active: boolean;
 
-  @Prop({ default: now() })
+  @Prop()
   createdAt: Date;
 
-  @Prop({ default: now() })
+  @Prop()
   updatedAt: Date;
 }
 

@@ -17,7 +17,7 @@ export function WifiClientsPage() {
 
   return <Layout>
     <div className='wifi-clients-page-container'>
-      <Grid container direction='column' my={2} gap={1}>
+      <Grid container flex={1} direction='column' my={2} gap={1}>
         <WifiClientList onEditClick={onEditClick} />
       </Grid>
       <WifiClientModal open={isEditing} id={editingId} onClose={closeModal} />

@@ -60,9 +60,5 @@ export function ClientRestrictionList({ onEditClick, onDeleteClick }: ClientRest
     },
   ];
 
-  return (
-    <div className='client-restriction-list-container'>
-      <DataGrid autoHeight rows={rows} columns={columns} />
-    </div>
-  );
+  return  <DataGrid autoPageSize rows={rows} columns={columns} />;
 }

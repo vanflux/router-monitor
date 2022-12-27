@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ClientRestrictionModule } from 'src/client-restriction/client-restriction.module';
-import { ActionsRunnerService } from './actions-runner.service';
+import { ActionsService } from './actions.service';
 import { ActionsController } from './actions.controller';
 import { ActionLog, ActionLogSchema } from './actions.entity';
 
@@ -11,7 +11,7 @@ import { ActionLog, ActionLogSchema } from './actions.entity';
     MongooseModule.forFeature([{ name: ActionLog.name, schema: ActionLogSchema }]),
   ],
   controllers: [ActionsController],
-  providers: [ActionsRunnerService],
-  exports: [ActionsRunnerService],
+  providers: [ActionsService],
+  exports: [ActionsService],
 })
 export class ActionsModule {}

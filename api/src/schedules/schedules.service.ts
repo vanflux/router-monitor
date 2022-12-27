@@ -4,7 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { plainToInstance } from "class-transformer";
 import { CronJob } from "cron";
 import { Model, Types } from "mongoose";
-import { ActionsRunnerService } from "src/action/actions-runner.service";
+import { ActionsService } from "src/action/actions.service";
 import { Action } from "src/action/actions.entity";
 import { CreateScheduleDto, UpdateScheduleDto } from "./schedules.dto";
 import { Schedule, ScheduleDocument } from "./schedules.entity";
@@ -18,7 +18,7 @@ export class SchedulesService {
     @InjectModel(Schedule.name)
     private readonly scheduleModel: Model<ScheduleDocument>,
     private readonly configService: ConfigService,
-    private readonly actionsRunnerService: ActionsRunnerService,
+    private readonly actionsService: ActionsService,
   ) {
     this.startAll();
   }
@@ -29,7 +29,7 @@ export class SchedulesService {
     if (existentJob) existentJob.stop();
     const job = new CronJob(
       cron,
-      () => this.actionsRunnerService.run(action).catch(exc => this.logger.error(exc)),
+      () => this.actionsService.run(action).catch(exc => this.logger.error(exc)),
       null,
       true,
       this.configService.get('tz', { infer: true }),

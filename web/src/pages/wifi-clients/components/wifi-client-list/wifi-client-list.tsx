@@ -36,5 +36,5 @@ export function WifiClientList({ onEditClick }: WifiClientListProps) {
     },
   ];
 
-  return <DataGrid autoHeight rows={rows} columns={columns} />;
+  return <DataGrid autoPageSize rows={rows} columns={columns} />;
 }
