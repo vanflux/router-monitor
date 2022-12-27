@@ -16,7 +16,7 @@ export interface WifiClientModalProps {
 }
 
 export function WifiClientModal({ open, id, onClose }: WifiClientModalProps) {
-  const { data: wifiClient } = useWifiClientByIdQuery(id);
+  const { data: wifiClient } = useWifiClientByIdQuery(open ? id : undefined);
 
   const { mutate: update } = useUpdateWifiClientMutation(
     () => toast.error('Failed to update wifi client!'),

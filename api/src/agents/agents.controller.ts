@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { Auth, Authorized } from 'src/auth/auth.decorator';
-import { AuthToken } from 'src/auth/auth.interface';
+import { Authorized } from 'src/auth/auth.decorator';
+import { EntityNotFoundException } from 'src/exceptions/entity-not-found.exception';
 import { AgentDto, AgentListItemDto, CreateAgentDto, UpdateAgentDto } from './agents.dto';
 import { AgentsService } from './agents.service';
 
@@ -24,6 +24,7 @@ export class AgentsController {
   @ApiResponse({ type: AgentListItemDto })
   async getById(@Param('id') id: string) {
     const agent = await this.agentsService.getById(id);
+    if (!agent) throw new EntityNotFoundException();
     return plainToInstance(AgentListItemDto, agent.toJSON());
   }
 
@@ -38,7 +39,7 @@ export class AgentsController {
   @Authorized('admin')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteById(@Param('id') id: string) {
-    return await this.agentsService.deleteById(id);
+    await this.agentsService.deleteById(id);
   }
 
   @Patch()
@@ -47,7 +48,7 @@ export class AgentsController {
   async update(@Body() updateAgentDto: UpdateAgentDto) {
     await this.agentsService.update(updateAgentDto);
     const agent = await this.agentsService.getById(updateAgentDto._id);
-    return plainToInstance(AgentDto, agent.toJSON());
+    return plainToInstance(AgentDto, agent?.toJSON());
   }
 
   @Post('/:id/secret')

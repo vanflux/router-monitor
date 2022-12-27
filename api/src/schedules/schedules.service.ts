@@ -3,11 +3,15 @@ import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/mongoose";
 import { plainToInstance } from "class-transformer";
 import { CronJob } from "cron";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { ActionsService } from "src/action/actions.service";
 import { Action } from "src/action/actions.entity";
 import { CreateScheduleDto, UpdateScheduleDto } from "./schedules.dto";
 import { Schedule, ScheduleDocument } from "./schedules.entity";
+import { parseId } from "src/utils/parse-id.util";
+import { EntityNotFoundException } from "src/exceptions/entity-not-found.exception";
+import { EntityUpdateException } from "src/exceptions/entity-update.exception";
+import { EntityDeleteException } from "src/exceptions/entity-delete.exception";
 
 @Injectable()
 export class SchedulesService {
@@ -23,7 +27,7 @@ export class SchedulesService {
     this.startAll();
   }
 
-  private ensureJobStarted(id: string, cron: string, rawAction: Action) {
+  private ensureJobStarted(id: string, cron: string, rawAction: Action): void {
     const action = plainToInstance(Action, rawAction);
     const existentJob = this.jobs.get(id);
     if (existentJob) existentJob.stop();
@@ -37,7 +41,7 @@ export class SchedulesService {
     this.jobs.set(id, job);
   }
 
-  private ensureJobStopped(id: string) {
+  private ensureJobStopped(id: string): void {
     const job = this.jobs.get(id);
     if (!job) return;
     job.stop();
@@ -49,7 +53,7 @@ export class SchedulesService {
   }
 
   async getById(id: string): Promise<Schedule> {
-    return await this.scheduleModel.findOne({ _id: new Types.ObjectId(id) });
+    return await this.scheduleModel.findOne({ _id: parseId(id) });
   }
 
   async create(createScheduleDto: CreateScheduleDto): Promise<string> {
@@ -58,26 +62,27 @@ export class SchedulesService {
     return id;
   }
 
-  async update(updateScheduleDto: UpdateScheduleDto): Promise<boolean> {
-    const { acknowledged } = await (await this.scheduleModel.updateOne({ _id: new Types.ObjectId(updateScheduleDto._id) }, { ...updateScheduleDto }));
-    if (!acknowledged) return false;
+  async update(updateScheduleDto: UpdateScheduleDto): Promise<void> {
+    const { matchedCount, acknowledged } = await (await this.scheduleModel.updateOne({ _id: parseId(updateScheduleDto._id) }, { ...updateScheduleDto }));
+    if (!matchedCount) throw new EntityNotFoundException();
+    if (!acknowledged) throw new EntityUpdateException();
     const schedule = await this.getById(updateScheduleDto._id);
     if (schedule.active) this.ensureJobStarted(String(schedule._id), schedule.cron, schedule.action);
     if (!schedule.active) this.ensureJobStopped(String(schedule._id));
-    return true;
   }
 
-  async deleteById(id: string) {
-    const { acknowledged } = await (await this.scheduleModel.deleteOne({ _id: new Types.ObjectId(id) }));
+  async deleteById(id: string): Promise<void> {
+    const { acknowledged, deletedCount } = await (await this.scheduleModel.deleteOne({ _id: parseId(id) }));
+    if (!deletedCount) throw new EntityNotFoundException();
+    if (!acknowledged) throw new EntityDeleteException();
     this.ensureJobStopped(id);
-    return acknowledged;
   }
 
-  stopAll() {
+  stopAll(): void {
     this.jobs.forEach((_, id) => this.ensureJobStopped(id));
   }
 
-  async startAll() {
+  async startAll(): Promise<void> {
     try {
       const schedules = await this.getAll();
       schedules.forEach(schedule => {

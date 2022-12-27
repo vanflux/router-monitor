@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
+import { EntityNotFoundException } from 'src/exceptions/entity-not-found.exception';
+import { EntityUpdateException } from 'src/exceptions/entity-update.exception';
+import { parseId } from 'src/utils/parse-id.util';
 import { CreateWifiClientsReportDto, UpdateWifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
 import { WifiClient, WifiClientDocument, WifiClientsReport, WifiClientsReportDocument } from './wifi-clients.entity';
 
@@ -13,12 +16,12 @@ export class WifiClientsService {
     private readonly wifiClientModel: Model<WifiClientDocument>,
   ) {}
   
-  async getAllClients() {
+  async getAllClients(): Promise<WifiClient[]> {
     return await this.wifiClientModel.find();
   }
   
-  async getClientById(id: string) {
-    return await this.wifiClientModel.findOne({ _id: new Types.ObjectId(id) });
+  async getClientById(id: string): Promise<WifiClient> {
+    return await this.wifiClientModel.findOne({ _id: parseId(id) });
   }
 
   async getAllRssiReports(agentId: string, precision: number, startDate?: Date, endDate?: Date) {
@@ -55,11 +58,13 @@ export class WifiClientsService {
     ]);
   }
 
-  async updateClient(updateWifiClientDto: UpdateWifiClientDto) {
-    return await (await this.wifiClientModel.updateOne({ _id: new Types.ObjectId(updateWifiClientDto._id) }, { $set: { name: updateWifiClientDto.name } })).acknowledged;
+  async updateClient(updateWifiClientDto: UpdateWifiClientDto): Promise<void> {
+    const { matchedCount, acknowledged } = await this.wifiClientModel.updateOne({ _id: parseId(updateWifiClientDto._id) }, { $set: { name: updateWifiClientDto.name } });
+    if (!matchedCount) throw new EntityNotFoundException();
+    if (!acknowledged) throw new EntityUpdateException();
   }
 
-  async createReport(agentId: string, wifiClientsReport: CreateWifiClientsReportDto) {
+  async createReport(agentId: string, wifiClientsReport: CreateWifiClientsReportDto): Promise<string> {
     await Promise.all(wifiClientsReport.clients.map(async ({ mac, hostname }) => {
       await this.wifiClientModel.updateOne({ mac }, { $setOnInsert: { mac, name: hostname } }, { upsert: true });
     }));

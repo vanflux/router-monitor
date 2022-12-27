@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useAgentsQuery } from "../../../../api/agents/agents.api";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import moment from "moment";
+import { formatDDMMYYHHmmss } from "../../../../utils/date-format.util";
 
 export interface AgentListProps {
   onEditClick?: (id: string) => void;
@@ -21,13 +21,13 @@ export function AgentList({ onEditClick, onDeleteClick }: AgentListProps) {
       field: 'createdAt',
       headerName: 'Creation Date',
       flex: 1,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
     {
       field: 'updatedAt',
       headerName: 'Update Date',
       flex: 1,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
     {
       field: '',

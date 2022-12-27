@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Authorized } from 'src/auth/auth.decorator';
+import { EntityNotFoundException } from 'src/exceptions/entity-not-found.exception';
 import { CreateClientRestrictionDto, UpdateClientRestrictionDto, ClientRestrictionDto } from './client-restriction.dto';
 import { ClientRestrictionService } from './client-restriction.service';
 
@@ -23,6 +24,7 @@ export class ClientRestrictionController {
   @ApiResponse({ type: ClientRestrictionDto })
   async getById(@Param('id') id: string) {
     const clientRestriction = await this.clientRestrictionService.getById(id);
+    if (!clientRestriction) throw new EntityNotFoundException();
     return plainToInstance(ClientRestrictionDto, clientRestriction.toJSON());
   }
 

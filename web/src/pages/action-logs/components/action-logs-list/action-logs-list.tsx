@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useActionLogsQuery } from "../../../../api/actions/actions.api";
-import moment from "moment";
+import { formatDDMMYYHHmmss } from "../../../../utils/date-format.util";
 
 export interface ActionLogListProps {}
 
@@ -14,10 +14,15 @@ export function ActionLogList({}: ActionLogListProps) {
     {
       field: 'createdAt',
       headerName: 'Creation Date',
-      width: 120,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      width: 150,
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
   ];
 
-  return <DataGrid autoPageSize rows={rows} columns={columns} />;
+  return <DataGrid
+    autoPageSize
+    sortModel={[{ field: 'createdAt', sort: 'desc' }]}
+    rows={rows}
+    columns={columns}
+  />;
 }

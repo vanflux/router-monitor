@@ -3,8 +3,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSchedulesQuery } from "../../../../api/schedules/schedules.api";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import moment from "moment";
 import { ActiveLabel } from "../../../../components/active-label/active-label";
+import { formatDDMMYYHHmmss } from "../../../../utils/date-format.util";
 
 export interface ScheduleListProps {
   onEditClick?: (id: string) => void;
@@ -28,13 +28,13 @@ export function ScheduleList({ onEditClick, onDeleteClick }: ScheduleListProps) 
       field: 'createdAt',
       headerName: 'Creation Date',
       flex: 1,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
     {
       field: 'updatedAt',
       headerName: 'Update Date',
       flex: 1,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
     {
       field: '',

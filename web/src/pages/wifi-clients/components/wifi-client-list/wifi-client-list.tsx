@@ -2,7 +2,7 @@ import IconButton from "@mui/material/IconButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useWifiClientsQuery } from "../../../../api/wifi-clients/wifi-clients.api";
 import EditIcon from '@mui/icons-material/Edit';
-import moment from "moment";
+import { formatDDMMYYHHmmss } from "../../../../utils/date-format.util";
 
 export interface WifiClientListProps {
   onEditClick?: (id: string) => void;
@@ -20,7 +20,7 @@ export function WifiClientList({ onEditClick }: WifiClientListProps) {
       field: 'updatedAt',
       headerName: 'Update Date',
       flex: 1,
-      valueFormatter: ({ value }: any) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
+      valueFormatter: ({ value }: any) => formatDDMMYYHHmmss(value),
     },
     {
       field: '',

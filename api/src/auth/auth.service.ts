@@ -19,6 +19,7 @@ export class AuthService {
 
   async loginAgent(id: string, secret: string): Promise<AuthResponseDto> {
     const agent = await this.agentsService.getByIdAndSecret(id, secret);
+    if (!agent) throw new LoginFailedException();
     const token = this.genJwtToken({ agent: { id: agent._id } });
     return { token };
   }

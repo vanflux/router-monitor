@@ -19,7 +19,7 @@ export interface ScheduleModalProps {
 }
 
 export function ScheduleModal({ open, id, editing, onClose }: ScheduleModalProps) {
-  const { data: fetchedSchedule } = useScheduleByIdQuery(id);
+  const { data: fetchedSchedule } = useScheduleByIdQuery(open ? id : undefined);
 
   const { mutate: create } = useCreateScheduleMutation(
     () => toast.error('Failed to create schedule!'),

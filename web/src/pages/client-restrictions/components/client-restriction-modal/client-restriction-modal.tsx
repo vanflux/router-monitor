@@ -17,7 +17,7 @@ export interface ClientRestrictionModalProps {
 }
 
 export function ClientRestrictionModal({ open, editing, id, onClose }: ClientRestrictionModalProps) {
-  const { data: fetchedClientRestriction } = useClientRestrictionByIdQuery(id);
+  const { data: fetchedClientRestriction } = useClientRestrictionByIdQuery(open ? id : undefined);
 
   const { mutate: create } = useCreateClientRestrictionMutation(
     () => toast.error('Failed to create client restriction!'),

@@ -3,6 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Authorized } from 'src/auth/auth.decorator';
 import { AuthToken } from 'src/auth/auth.interface';
+import { EntityNotFoundException } from 'src/exceptions/entity-not-found.exception';
 import { CreateWifiClientsReportDto, UpdateWifiClientDto, WifiClientDto, WifiClientsRssiReportDto } from './wifi-clients.dto';
 import { WifiClientsService } from './wifi-clients.service';
 
@@ -24,6 +25,7 @@ export class WifiClientsController {
   @ApiResponse({ type: WifiClientDto })
   async getClientById(@Param('id') id: string) {
     const wifiClient = await this.wifiClientsService.getClientById(id);
+    if (!wifiClient) throw new EntityNotFoundException();
     return plainToInstance(WifiClientDto, wifiClient.toJSON());
   }
 

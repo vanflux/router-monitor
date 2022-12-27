@@ -19,7 +19,7 @@ export interface AgentModalProps {
 }
 
 export function AgentModal({ open, id, editing, onClose }: AgentModalProps) {
-  const { data: fetchedAgent } = useAgentByIdQuery(id);
+  const { data: fetchedAgent } = useAgentByIdQuery(open ? id : undefined);
 
   const { mutate: create } = useCreateAgentMutation(
     () => toast.error('Failed to create agent!'),

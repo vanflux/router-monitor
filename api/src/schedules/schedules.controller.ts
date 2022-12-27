@@ -4,6 +4,7 @@ import { Authorized } from 'src/auth/auth.decorator';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto, ScheduleDto, UpdateScheduleDto } from './schedules.dto';
 import { plainToInstance } from 'class-transformer';
+import { EntityNotFoundException } from 'src/exceptions/entity-not-found.exception';
 
 @Controller('schedules')
 @ApiTags('schedules')
@@ -23,6 +24,7 @@ export class SchedulesController {
   @ApiResponse({ type: ScheduleDto })
   async getById(@Param('id') id: string) {
     const schedule = await this.schedulesService.getById(id);
+    if (!schedule) throw new EntityNotFoundException();
     return plainToInstance(ScheduleDto, schedule.toJSON());
   }
 
