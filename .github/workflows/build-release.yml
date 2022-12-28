@@ -16,6 +16,8 @@ jobs:
         id: tagName
         with:
           tagRegex: "v(.*)"
+      - name: Show release version
+        run: echo Release version ${{ steps.tagName.outputs.tag }}
       - name: Setup node
         uses: actions/setup-node@v3
         with:
