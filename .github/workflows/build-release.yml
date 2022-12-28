@@ -31,6 +31,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build
-        run: yarn build:${{ matrix.project }}
-#      - name: Push
-#        run: yarn build:${{ matrix.project }}
+        run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+      - name: Versioned push
+        run: docker push vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}
+      - name: Push latest
+        run: docker push vanflux/rm-${{ matrix.project }}
