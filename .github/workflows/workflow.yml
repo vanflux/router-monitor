@@ -13,26 +13,27 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - uses: olegtarasov/get-tag@v2.1.2
-        id: tagName
-        with:
-          tagRegex: "v(.*)"
-      - name: Get image names
-        id: image
-        run: |
-              echo "latest=vanflux/rm-${{ matrix.project }}" >> $GITHUB_OUTPUT
-              echo "versioned=vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}" >> $GITHUB_OUTPUT
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - uses: olegtarasov/get-tag@v2.1.2
+#        id: tagName
+#        with:
+#          tagRegex: "v(.*)"
+#      - name: Get image names
+#        id: image
+#        run: |
+#              echo "latest=vanflux/rm-${{ matrix.project }}" >> $GITHUB_OUTPUT
+#              echo "versioned=vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}" >> $GITHUB_OUTPUT
+#      - name: Setup node
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build image
-        run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+        run: sleep 10
+#        run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
       - name: Wait for all builds
         uses: lewagon/wait-on-check-action@master
         with:
@@ -40,20 +41,20 @@ jobs:
           check-name: 'Build image'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 5
-      - name: Tag versioned image
-        run: docker tag ${{ steps.image.outputs.latest }} ${{ steps.image.outputs.versioned }}
-      - name: Versioned push
-        run: docker push ${{ steps.image.outputs.versioned }}
-      - name: Push latest
-        run: docker push ${{ steps.image.outputs.latest }}
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ~/services && ./deploy-rm.sh
+#      - name: Tag versioned image
+#        run: docker tag ${{ steps.image.outputs.latest }} ${{ steps.image.outputs.versioned }}
+#      - name: Versioned push
+#        run: docker push ${{ steps.image.outputs.versioned }}
+#      - name: Push latest
+#        run: docker push ${{ steps.image.outputs.latest }}
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy
+#        uses: appleboy/ssh-action@v0.1.6
+#        with:
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USER }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: cd ~/services && ./deploy-rm.sh
