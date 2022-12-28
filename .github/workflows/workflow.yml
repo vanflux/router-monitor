@@ -1,4 +1,4 @@
-name: Build Release
+name: Action CI
 on:
   push:
     tags:
@@ -38,3 +38,16 @@ jobs:
         run: docker push ${{ steps.image.outputs.versioned }}
       - name: Push latest
         run: docker push ${{ steps.image.outputs.latest }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+                  echo 123
+                  echo abc
