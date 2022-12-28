@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [agent, api, web]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -15,4 +18,4 @@ jobs:
         with:
           node-version: 16
       - name: Build
-        run: yarn build
+        run: yarn build:${{ matrix.project }}
