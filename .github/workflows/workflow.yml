@@ -32,12 +32,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build image
         run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
-      - name: Github SHA
-        run: echo github.sha = ${{ github.sha }}
       - name: Wait for all builds
-        uses: lewagon/wait-on-check-action@v1.2.0
+        uses: lewagon/wait-on-check-action@master
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.ref }}
           check-name: 'Build image'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 5
