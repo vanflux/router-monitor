@@ -49,4 +49,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ~/services && ./deploy-rm.sh 2>/dev/null
+          script: cd ~/services && ./deploy-rm.sh
