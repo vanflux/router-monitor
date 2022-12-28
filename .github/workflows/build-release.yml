@@ -32,6 +32,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build
         run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+      - name: Tag versioned image
+        run: docker tag vanflux/rm-${{ matrix.project }} vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}
       - name: Versioned push
         run: docker push vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}
       - name: Push latest
