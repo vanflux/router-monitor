@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--mui-palette-grey-400);
+  border: 1px solid rgba(var(--mui-palette-common-onBackgroundChannel) / 0.23);
   border-radius: 4px;
   padding: 0px 8px;
 }

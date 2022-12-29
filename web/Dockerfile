@@ -5,8 +5,8 @@ RUN yarn install --frozen-lockfile --no-cache && yarn cache clean
 COPY public public
 COPY src src
 COPY index.html vite.config.ts tsconfig*.json ./
-ARG API_BASE_URL
-ENV VITE_API_BASE_URL "$API_BASE_URL"
+ARG VERSION
+ENV VERSION $VERSION
 RUN yarn build
 
 FROM nginx:alpine

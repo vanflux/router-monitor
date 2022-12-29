@@ -1,0 +1,17 @@
+name: Build
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [agent, api, web]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build image
+        run: docker build --build-arg VERSION=test ${{ matrix.project }}

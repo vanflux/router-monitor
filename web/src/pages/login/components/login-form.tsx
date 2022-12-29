@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, SvgIcon, TextField, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { ReactComponent as Logo } from '../../../assets/logo.svg';
 import { PasswordTextInput } from '../../../components/password-text-input/password-text-input';
@@ -18,7 +18,10 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   return <Grid container justifyContent='center' alignContent='center'>
     <form>
       <Grid mb={2} display='flex' alignItems='center' justifyContent='center'>
-        <Logo width={64} height={64} />
+        <SvgIcon
+          component={({ className }) => <Logo className={className} style={{ width: 64, height: 64 }} />}
+          color='primary'
+        />
       </Grid>
       <Grid mb={2} display='flex' alignItems='center' justifyContent='center'>
         <Typography mr={2} variant='h5'>Router Monitor</Typography>

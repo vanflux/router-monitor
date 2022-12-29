@@ -1,4 +1,4 @@
-name: Action CI
+name: Full
 on:
   push:
     tags:
@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build image
-        run: docker build -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+        run: docker build --build-arg "VERSION=${{ steps.tagName.outputs.tag }}" -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
       - name: Tag versioned image
         run: docker tag ${{ steps.image.outputs.latest }} ${{ steps.image.outputs.versioned }}
       - name: Versioned push

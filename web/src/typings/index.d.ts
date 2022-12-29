@@ -1,6 +1,10 @@
 
 declare module '*.svg' {
-  export const ReactComponent: React.FC<{ fill?: string; width?: number | string, height?: number | string }>;
+  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
 declare interface Window { env?: { apiBaseUrl?: string } }
+
+declare interface ImportMetaEnv {
+  VERSION?: string;
+}

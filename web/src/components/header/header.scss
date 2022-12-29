@@ -7,4 +7,16 @@
   align-items: center;
   background-color: var(--mui-palette-primary-main);
   color: var(--mui-palette-primary-contrastText);
+  padding: 0px 16px;
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+  .right {
+    display: flex;
+  }
 }
