@@ -4,7 +4,7 @@ import { ToggleDarkMode } from "../toggle-dark-mode/toggle-dark-mode";
 import './header.scss';
 
 export function Header() {
-  const version = import.meta.env.VERSION || 'dev';
+  const version = import.meta.env.VITE_VERSION || 'dev';
 
   return <div className='header-container'>
     <div className='center'>

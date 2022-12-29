@@ -6,7 +6,7 @@ COPY public public
 COPY src src
 COPY index.html vite.config.ts tsconfig*.json ./
 ARG VERSION
-ENV VERSION $VERSION
+ENV VITE_VERSION $VERSION
 RUN yarn build
 
 FROM nginx:alpine

@@ -6,5 +6,5 @@ declare module '*.svg' {
 declare interface Window { env?: { apiBaseUrl?: string } }
 
 declare interface ImportMetaEnv {
-  VERSION?: string;
+  VITE_VERSION?: string;
 }
