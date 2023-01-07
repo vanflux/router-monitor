@@ -8,7 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: [agent, api, web]
+        include:
+          - project: agent
+            platform: linux/arm/v7,linux/arm64/v8,linux/amd64
+            setup-qemu: true
+          - project: api
+            platform: linux/amd64
+            setup-qemu: false
+          - project: web
+            platform: linux/amd64
+            setup-qemu: false
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -21,17 +30,18 @@ jobs:
         run: |
               echo "latest=vanflux/rm-${{ matrix.project }}" >> $GITHUB_OUTPUT
               echo "versioned=vanflux/rm-${{ matrix.project }}:${{ steps.tagName.outputs.tag }}" >> $GITHUB_OUTPUT
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        if: ${{ matrix.setup-qemu }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build image
-        run: docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --build-arg "VERSION=${{ steps.tagName.outputs.tag }}" --tag vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+        run: docker buildx build --platform ${{ matrix.platform }} --build-arg "VERSION=${{ steps.tagName.outputs.tag }}" --tag vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
       - name: Tag versioned image
         run: docker tag ${{ steps.image.outputs.latest }} ${{ steps.image.outputs.versioned }}
       - name: Versioned push
