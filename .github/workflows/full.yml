@@ -45,8 +45,8 @@ jobs:
         with:
           context: ${{ matrix.project }}
           push: true
-          build-args:
-            - VERSION=${{ steps.tagName.outputs.tag }}
+          build-args: |
+            VERSION=${{ steps.tagName.outputs.tag }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.image.outputs.latest }},${{ steps.image.outputs.versioned }}
   deploy:
