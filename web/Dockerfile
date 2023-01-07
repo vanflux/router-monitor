@@ -1,7 +1,7 @@
 FROM node:16-alpine as builder
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --no-cache && yarn cache clean
+RUN yarn install --network-timeout 1000000 --frozen-lockfile --no-cache && yarn cache clean
 COPY public public
 COPY src src
 COPY index.html vite.config.ts tsconfig*.json ./
