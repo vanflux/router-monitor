@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build image
-        run: docker build --build-arg "VERSION=${{ steps.tagName.outputs.tag }}" -t vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
+        run: docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --build-arg "VERSION=${{ steps.tagName.outputs.tag }}" --tag vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
       - name: Tag versioned image
         run: docker tag ${{ steps.image.outputs.latest }} ${{ steps.image.outputs.versioned }}
       - name: Versioned push

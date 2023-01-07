@@ -17,4 +17,4 @@ jobs:
         with:
           node-version: 16
       - name: Build image
-        run: docker build --build-arg VERSION=test ${{ matrix.project }}
+        run: docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --build-arg VERSION=test --tag vanflux/rm-${{ matrix.project }} ${{ matrix.project }}
